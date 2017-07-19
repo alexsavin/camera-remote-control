@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context="com.fuckolympus.arc.MainActivity" android:layout_centerHorizontal="true" android:layout_centerVertical="true"
+        android:background="@android:color/darker_gray">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/conn_in_progress" android:layout_centerHorizontal="true" android:layout_centerVertical="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" android:id="@+id/initMsgText"/>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/photo_camera" android:layout_above="@+id/initMsgText"
+            android:layout_centerHorizontal="true" android:layout_marginBottom="14dp" android:id="@+id/imageView" android:contentDescription="@string/camera_icon_descr"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_below="@+id/initMsgText" android:layout_centerHorizontal="true"
+            android:layout_marginTop="22dp" android:id="@+id/cameraNameText" android:contentDescription="@string/camera_descr"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
+    <Button
+            android:text="@string/try_again_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tryAgainBtn" android:visibility="invisible"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_marginBottom="47dp" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
+</RelativeLayout>

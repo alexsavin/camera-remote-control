@@ -3,6 +3,7 @@ package com.fuckolympus.arc;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import com.fuckolympus.arc.session.Session;
 
 /**
  * Created by alex on 6.6.17.

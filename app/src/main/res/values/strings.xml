@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ARC</string>
     <string name="app_name_shutter">ARC - SHUTTER</string>
+    <string name="app_name_main_menu">ARC - MAIN MENU</string>
 
     <string name="conn_in_progress">Connecting…</string>
     <string name="conn_success">Connected</string>
@@ -10,4 +11,9 @@
     <string name="shutter_icon_descr">Shutter icon</string>
     <string name="try_again_btn">Retry</string>
     <string name="first_push_btn">1st push</string>
+
+    <string name="shutter_activity_btn">SHUTTER</string>
+    <string name="images_activity_btn">IMAGES</string>
+    <string name="eclipse_activity_btn">ECLIPSE</string>
+    <string name="power_off_btn">POWER OFF</string>
 </resources>

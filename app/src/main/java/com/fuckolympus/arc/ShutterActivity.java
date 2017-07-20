@@ -1,5 +1,6 @@
 package com.fuckolympus.arc;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -51,6 +52,30 @@ public class ShutterActivity extends SessionAwareActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        switchToShutterMode();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ShutterActivity.this, MenuActivity.class);
+        ShutterActivity.this.startActivity(intent);
+    }
+
+    private void switchToShutterMode() {
+        session.getCameraApi().switchToShutterMode(
+                new Callback<String>() {
+                    @Override
+                    public void apply(String arg) {
+                        ImageButton shutterButton = (ImageButton) findViewById(R.id.shutterButton);
+                        shutterButton.setClickable(true);
+                    }
+                }, failureCallback
+        );
     }
 
     private void execShutter() {

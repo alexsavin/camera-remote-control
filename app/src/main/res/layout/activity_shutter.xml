@@ -15,7 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:srcCompat="@drawable/shutter"
             android:layout_marginTop="140dp" android:id="@+id/shutterButton"
-            android:layout_alignParentTop="true" android:layout_centerHorizontal="true" android:contentDescription="@string/shutter_icon_descr"/>
+            android:layout_alignParentTop="true" android:layout_centerHorizontal="true" android:contentDescription="@string/shutter_icon_descr"
+            android:clickable="false"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:layout_below="@+id/shutterButton" android:layout_centerHorizontal="true"

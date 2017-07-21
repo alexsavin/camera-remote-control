@@ -1,5 +1,6 @@
 package com.fuckolympus.arc;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +9,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import com.fuckolympus.arc.camera.api.CameraState;
 import com.fuckolympus.arc.camera.api.ShutterMode;
+import com.fuckolympus.arc.camera.vo.Desclist;
 import com.fuckolympus.arc.util.Callback;
 
 public class ShutterActivity extends SessionAwareActivity {
@@ -57,7 +60,7 @@ public class ShutterActivity extends SessionAwareActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        switchToShutterMode();
+        switchToRecMode();
     }
 
     @Override
@@ -66,16 +69,48 @@ public class ShutterActivity extends SessionAwareActivity {
         ShutterActivity.this.startActivity(intent);
     }
 
+    private void switchToRecMode() {
+        session.getCameraApi().switchToRecMode(new Callback<String>() {
+            @Override
+            public void apply(String arg) {
+                getCameraProps();
+            }
+        }, failureCallback);
+    }
+
+    private void getCameraProps() {
+        session.getCameraApi().getCameraProps(new Callback<Desclist>() {
+            @Override
+            public void apply(Desclist arg) {
+                CameraState cameraState = new CameraState.CameraStateBuilder()
+                        .withTakeMode(arg.getTakeMode())
+                        .withShutterSpeedValue(arg.getShutterSpeedValue())
+                        .withFocalValue(arg.getFocalValue())
+                        .build();
+                updateUI(cameraState);
+                switchToShutterMode();
+            }
+        }, failureCallback);
+    }
+
+    private void updateUI(CameraState cameraState) {
+        TextView cameraModeText = (TextView) findViewById(R.id.cameraModeText);
+        TextView shutterSpeedText = (TextView) findViewById(R.id.shutterSpeedText);
+        TextView focalValueText = (TextView) findViewById(R.id.focusValueText);
+
+        cameraModeText.setText(cameraState.getTakeMode());
+        shutterSpeedText.setText(cameraState.getShutterSpeedValue());
+        focalValueText.setText(String.valueOf(cameraState.getFocalValue()));
+    }
+
     private void switchToShutterMode() {
-        session.getCameraApi().switchToShutterMode(
-                new Callback<String>() {
-                    @Override
-                    public void apply(String arg) {
-                        ImageButton shutterButton = (ImageButton) findViewById(R.id.shutterButton);
-                        shutterButton.setClickable(true);
-                    }
-                }, failureCallback
-        );
+        session.getCameraApi().switchToShutterMode(new Callback<String>() {
+            @Override
+            public void apply(String arg) {
+                ImageButton shutterButton = (ImageButton) findViewById(R.id.shutterButton);
+                shutterButton.setClickable(true);
+            }
+        }, failureCallback);
     }
 
     private void execShutter() {
@@ -98,8 +133,6 @@ public class ShutterActivity extends SessionAwareActivity {
     private class ShutterCallback implements Callback<String> {
         @Override
         public void apply(String arg) {
-            TextView errorText = (TextView) findViewById(R.id.errorText);
-            errorText.setText("");
             firstRelease();
         }
     }
@@ -107,17 +140,18 @@ public class ShutterActivity extends SessionAwareActivity {
     private class SuccessCallback implements Callback<String> {
         @Override
         public void apply(String arg) {
-            TextView errorText = (TextView) findViewById(R.id.errorText);
-            errorText.setText("");
+            // do nothing
         }
     }
 
     private class FailureCallback implements Callback<String> {
-
         @Override
         public void apply(String arg) {
-            TextView errorText = (TextView) findViewById(R.id.errorText);
-            errorText.setText(arg);
+            AlertDialog.Builder builder = new AlertDialog.Builder(ShutterActivity.this);
+            AlertDialog alertDialog = builder.setTitle(R.string.error_dialog_title)
+                    .setMessage(arg)
+                    .create();
+            alertDialog.show();
         }
     }
 }

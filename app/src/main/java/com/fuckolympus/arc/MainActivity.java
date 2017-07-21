@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.fuckolympus.arc.camera.api.CameraState;
 import com.fuckolympus.arc.camera.vo.Caminfo;
-import com.fuckolympus.arc.camera.vo.Desclist;
 import com.fuckolympus.arc.error.CustomExceptionHandler;
 import com.fuckolympus.arc.util.Callback;
 
@@ -52,18 +50,6 @@ public class MainActivity extends SessionAwareActivity {
                 }, failureCallback);
     }
 
-    private void switchToShutterMode() {
-        session.getCameraApi().switchToShutterMode(
-                new Callback<String>() {
-                    @Override
-                    public void apply(String arg) {
-                        Intent intent = new Intent(MainActivity.this, ShutterActivity.class);
-                        MainActivity.this.startActivity(intent);
-                    }
-                }, failureCallback
-        );
-    }
-
     private class FailureCallback implements Callback<String> {
         @Override
         public void apply(String arg) {
@@ -86,10 +72,7 @@ public class MainActivity extends SessionAwareActivity {
                 initMsgText.setText(R.string.conn_success);
                 cameraName.setText(info);
                 tryAgainBtn.setVisibility(View.INVISIBLE);
-                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                MainActivity.this.startActivity(intent);
-                //switchToRecMode();
-                //switchToShutterMode();
+                showMenuActivity();
                 break;
             }
             case FAILURE_FLAG: {
@@ -100,19 +83,8 @@ public class MainActivity extends SessionAwareActivity {
         }
     }
 
-    private void switchToRecMode() {
-        session.getCameraApi().switchToRecMode(new Callback<String>() {
-            @Override
-            public void apply(String arg) {
-                session.getCameraApi().getCameraProps(new Callback<Desclist>() {
-                    @Override
-                    public void apply(Desclist arg) {
-                        CameraState cameraState = new CameraState.CameraStateBuilder()
-                                .withTakeMode(arg.getTakeMode()).build();
-
-                    }
-                }, failureCallback);
-            }
-        }, failureCallback);
+    private void showMenuActivity() {
+        Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+        MainActivity.this.startActivity(intent);
     }
 }

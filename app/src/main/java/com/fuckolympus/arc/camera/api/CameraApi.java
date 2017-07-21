@@ -29,7 +29,7 @@ public class CameraApi {
 
     public static final String EXEC_SHUTTER = "/exec_shutter.cgi?com=%s";
 
-    public static final String GET_CAMPROP_DESCLIST = "get_camprop.cgi?com=desc&propname=desclist";
+    public static final String GET_CAMPROP_DESCLIST = "/get_camprop.cgi?com=desc&propname=desclist";
 
     private Context context;
 
@@ -44,7 +44,7 @@ public class CameraApi {
         }
     };
 
-    private GsonXml gsonXml = new GsonXmlBuilder().setXmlParserCreator(parserCreator).create();
+    private GsonXml gsonXml = new GsonXmlBuilder().setSameNameLists(true).setXmlParserCreator(parserCreator).create();
 
     public CameraApi(Context context) {
         this.context = context;

@@ -31,6 +31,8 @@ public class CameraApi {
 
     public static final String GET_CAMPROP_DESCLIST = "/get_camprop.cgi?com=desc&propname=desclist";
 
+    public static final String EXEC_PWOFF_CGI = "/exec_pwoff.cgi";
+
     private Context context;
 
     private XmlParserCreator parserCreator = new XmlParserCreator() {
@@ -93,6 +95,10 @@ public class CameraApi {
     public void executeShutter(ShutterMode shutterMode, final Callback<String> successCallback, final Callback<String> failureCallback) {
         makeGetRequest(String.format(CAMERA_URL + EXEC_SHUTTER, shutterMode.getCom()), new DelegateCallback(successCallback),
                 new FailureDelegateCallback(failureCallback));
+    }
+
+    public void powerOff(final Callback<String> successCallback, final Callback<String> failureCallback) {
+        makeGetRequest(CAMERA_URL + EXEC_PWOFF_CGI, new DelegateCallback(successCallback), new FailureDelegateCallback(failureCallback));
     }
 
     private void makeGetRequest(String url, final DelegateCallback successCallback, final FailureDelegateCallback failureCallback) {

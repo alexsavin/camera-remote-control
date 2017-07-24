@@ -3,6 +3,7 @@
     <string name="app_name_shutter">ARC - SHUTTER</string>
     <string name="app_name_main_menu">ARC - MAIN MENU</string>
     <string name="app_name_eclipse">ARC - ECLIPSE</string>
+    <string name="app_name_images">ARC - IMAGES</string>
     <string name="conn_in_progress">Connecting…</string>
     <string name="conn_success">Connected</string>
     <string name="conn_failed">No camera found</string>
@@ -18,4 +19,8 @@
     <string name="power_off_btn">POWER OFF</string>
     <string name="default_prop_text">- -</string>
     <string name="error_dialog_title">Error</string>
+    <string name="confirm_dialog_title">Confirm</string>
+    <string name="confirm_power_off">Do you want to switch camera off?</string>
+    <string name="yes_btn">Yes</string>
+    <string name="no_btn">No</string>
 </resources>

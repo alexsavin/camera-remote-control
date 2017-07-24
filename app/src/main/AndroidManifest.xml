@@ -30,8 +30,13 @@
                 android:label="@string/app_name_main_menu"
                 android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".EclipseActivity"
-                  android:label="@string/app_name_eclipse"
+        <activity
+                android:name=".EclipseActivity"
+                android:label="@string/app_name_eclipse"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".ImagesActivity"
+                  android:label="@string/app_name_images"
                   android:screenOrientation="portrait">
         </activity>
     </application>

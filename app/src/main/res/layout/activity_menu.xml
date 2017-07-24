@@ -20,14 +20,21 @@
         <Button
                 android:text="@string/shutter_activity_btn"
                 android:layout_width="match_parent"
-                android:layout_height="86dp" android:id="@+id/shutterActivityButton"/>
+                android:layout_height="86dp" android:id="@+id/shutterActivityButton" android:drawableLeft="@drawable/shutter_48"
+                android:drawableStart="@drawable/shutter_48"/>
         <Button
                 android:text="@string/images_activity_btn"
                 android:layout_width="match_parent"
-                android:layout_height="87dp" android:id="@+id/imagesActivityButton"/>
+                android:layout_height="87dp" android:id="@+id/imagesActivityButton" android:drawableLeft="@drawable/images_48"
+                android:drawableStart="@drawable/images_48"/>
         <Button
                 android:text="@string/eclipse_activity_btn"
                 android:layout_width="match_parent"
-                android:layout_height="91dp" android:id="@+id/eclipseButton"/>
+                android:layout_height="91dp" android:id="@+id/eclipseButton" android:drawableLeft="@drawable/eclipse_48"
+                android:drawableStart="@drawable/eclipse_48"/>
     </LinearLayout>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/power_off" android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" android:id="@+id/powerOffButton" android:contentDescription="@string/poff_icon_descr"/>
 </RelativeLayout>

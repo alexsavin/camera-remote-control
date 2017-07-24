@@ -11,20 +11,27 @@
             android:label="@string/app_name"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
-                  android:screenOrientation="portrait">
+        <activity
+                android:name=".MainActivity"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ShutterActivity"
-                  android:label="@string/app_name_shutter"
-                  android:screenOrientation="portrait">
+        <activity
+                android:name=".ShutterActivity"
+                android:label="@string/app_name_shutter"
+                android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".MenuActivity"
-                  android:label="@string/app_name_main_menu"
+        <activity
+                android:name=".MenuActivity"
+                android:label="@string/app_name_main_menu"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".EclipseActivity"
+                  android:label="@string/app_name_eclipse"
                   android:screenOrientation="portrait">
         </activity>
     </application>

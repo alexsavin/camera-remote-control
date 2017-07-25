@@ -27,7 +27,7 @@ public final class HttpUtil {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        successHandler.handle(response);
+                        successHandler. handle(response);
                     }
                 },
                 new Response.ErrorListener() {

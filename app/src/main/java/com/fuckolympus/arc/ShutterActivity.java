@@ -1,6 +1,5 @@
 package com.fuckolympus.arc;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,12 +12,13 @@ import com.fuckolympus.arc.camera.api.CameraState;
 import com.fuckolympus.arc.camera.api.ShutterMode;
 import com.fuckolympus.arc.camera.vo.Desclist;
 import com.fuckolympus.arc.util.Callback;
+import com.fuckolympus.arc.util.DefaultFailureCallback;
 
 public class ShutterActivity extends SessionAwareActivity {
 
     private volatile boolean buttonPressed = false;
 
-    private FailureCallback failureCallback = new FailureCallback();
+    private DefaultFailureCallback failureCallback = new DefaultFailureCallback(this);
     private ShutterCallback shutterCallback = new ShutterCallback();
     private SuccessCallback successCallback = new SuccessCallback();
 
@@ -144,14 +144,4 @@ public class ShutterActivity extends SessionAwareActivity {
         }
     }
 
-    private class FailureCallback implements Callback<String> {
-        @Override
-        public void apply(String arg) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(ShutterActivity.this);
-            AlertDialog alertDialog = builder.setTitle(R.string.error_dialog_title)
-                    .setMessage(arg)
-                    .create();
-            alertDialog.show();
-        }
-    }
 }

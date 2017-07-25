@@ -1,6 +1,7 @@
 package com.fuckolympus.arc.camera.api;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import com.android.volley.Request;
 import com.fuckolympus.arc.camera.vo.Caminfo;
 import com.fuckolympus.arc.camera.vo.Desclist;
@@ -23,8 +24,8 @@ import java.util.List;
  */
 public class CameraApi {
 
-    public static final String CAMERA_URL = "http://192.168.0.10";
-    //public static final String CAMERA_URL = "http://alexandersavin.me";
+    //public static final String CAMERA_URL = "http://192.168.0.10";
+    public static final String CAMERA_URL = "http://alexandersavin.me";
 
     public static final String GET_CAMINFO = "/get_caminfo.cgi";
 
@@ -103,6 +104,16 @@ public class CameraApi {
                     }
                 },
                 new FailureDelegateCallback(failureCallback));
+    }
+
+    public void getThumbnail(String imageName, int width, int height, final Callback<Bitmap> successCallback, final Callback<String> failureCallback) {
+        HttpUtil.loadImageRequest(context, String.format(CAMERA_URL + GET_THUMBNAIL, imageName), width, height,
+                new HttpUtil.SuccessImageResponseHandler() {
+                    @Override
+                    public void handle(Bitmap bitmap) {
+                        successCallback.apply(bitmap);
+                    }
+                }, new FailureDelegateCallback(failureCallback));
     }
 
     public void getCameraProps(final Callback<Desclist> successCallback, final Callback<String> failureCallback) {

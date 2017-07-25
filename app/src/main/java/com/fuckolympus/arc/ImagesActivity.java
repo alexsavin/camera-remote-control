@@ -2,9 +2,8 @@ package com.fuckolympus.arc;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -14,12 +13,13 @@ import com.fuckolympus.arc.camera.vo.ImageFile;
 import com.fuckolympus.arc.util.Callback;
 import com.fuckolympus.arc.util.DefaultFailureCallback;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
 public class ImagesActivity extends SessionAwareActivity {
+
+    public static final int THUMBNAIL_WIDTH = 160;
+    public static final int THUMBNAIL_HEIGHT = 120;
 
     private DefaultFailureCallback failureCallback = new DefaultFailureCallback(this);
 
@@ -60,15 +60,6 @@ public class ImagesActivity extends SessionAwareActivity {
                 GridView imagesGrid = (GridView) findViewById(R.id.imagesGrid);
                 ImageAdapter adapter = (ImageAdapter) imagesGrid.getAdapter();
                 adapter.setImageFiles(arg);
-
-                // todo - rewrite it using Volley library
-                int SDK_INT = android.os.Build.VERSION.SDK_INT;
-                if (SDK_INT > 8) {
-                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                            .permitAll().build();
-                    StrictMode.setThreadPolicy(policy);
-                    adapter.notifyDataSetChanged();
-                }
             }
         }, failureCallback);
     }
@@ -83,8 +74,9 @@ public class ImagesActivity extends SessionAwareActivity {
             this.context = context;
         }
 
-        public void setImageFiles(List<ImageFile> imageFiles) {
+        void setImageFiles(List<ImageFile> imageFiles) {
             this.imageFiles = imageFiles;
+            this.notifyDataSetChanged();
         }
 
         @Override
@@ -104,22 +96,31 @@ public class ImagesActivity extends SessionAwareActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ImageView imageView;
+            final ImageView imageView;
             if (convertView == null) {
                 // if it's not recycled, initialize some attributes
                 imageView = new ImageView(context);
-                imageView.setLayoutParams(new GridView.LayoutParams(160, 120));
+                imageView.setLayoutParams(new GridView.LayoutParams(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             } else {
                 imageView = (ImageView) convertView;
             }
 
-            try {
-                URL url = new URL(imageFiles.get(position).thumbnailPath);
-                imageView.setImageBitmap(BitmapFactory.decodeStream(url.openConnection().getInputStream()));
-            } catch (IOException e) {
-                imageView.setImageResource(R.drawable.images_256);
-            }
+            session.getCameraApi().getThumbnail(imageFiles.get(position).name, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT,
+                    new Callback<Bitmap>() {
+                        @Override
+                        public void apply(Bitmap arg) {
+                            imageView.setImageBitmap(arg);
+                        }
+                    },
+                    new Callback<String>() {
+                        @Override
+                        public void apply(String arg) {
+                            imageView.setImageResource(R.drawable.images_256);
+                        }
+                    }
+            );
+
             return imageView;
         }
     }

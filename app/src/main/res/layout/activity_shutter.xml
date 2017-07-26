@@ -26,7 +26,11 @@
         <TextView
                 android:text="@string/default_prop_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/focusValueText" android:layout_weight="0.24" android:textAlignment="center"/>
+                android:layout_height="wrap_content" android:id="@+id/focalValueText" android:layout_weight="0.24" android:textAlignment="center"/>
+        <TextView
+                android:text="@string/default_prop_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/expCompText" android:layout_weight="0.24" android:textAlignment="center"/>
     </LinearLayout>
     <ImageButton
             android:layout_height="wrap_content" app:srcCompat="@drawable/shutter"

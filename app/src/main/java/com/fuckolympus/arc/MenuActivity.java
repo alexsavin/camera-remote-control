@@ -43,6 +43,15 @@ public class MenuActivity extends SessionAwareActivity {
             }
         });
 
+        Button settingsActivityButton = (Button) findViewById(R.id.settingsButton);
+        settingsActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, SettingsActivity.class);
+                MenuActivity.this.startActivity(intent);
+            }
+        });
+
         ImageButton powerOffButton = (ImageButton) findViewById(R.id.powerOffButton);
         powerOffButton.setOnClickListener(new View.OnClickListener() {
             @Override

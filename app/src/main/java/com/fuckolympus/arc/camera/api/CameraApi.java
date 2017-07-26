@@ -17,6 +17,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -155,12 +156,13 @@ public class CameraApi {
                 continue;
             }
             ImageFile imageFile = new ImageFile();
-            imageFile.name = fields[0] + '/' + fields[1];
+            imageFile.path = fields[0];
+            imageFile.name = fields[1];
             imageFile.size = Long.parseLong(fields[2]);
-            imageFile.thumbnailPath = String.format(CAMERA_URL + GET_THUMBNAIL, imageFile.name);
             imageFiles.add(imageFile);
         }
 
+        Collections.reverse(imageFiles);
         return imageFiles;
     }
 

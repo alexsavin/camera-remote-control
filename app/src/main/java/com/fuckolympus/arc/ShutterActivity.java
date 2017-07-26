@@ -16,6 +16,7 @@ import com.fuckolympus.arc.util.DefaultFailureCallback;
 
 public class ShutterActivity extends SessionAwareActivity {
 
+    public static final String FOCAL_VALUE = "F%s";
     private volatile boolean buttonPressed = false;
 
     private DefaultFailureCallback failureCallback = new DefaultFailureCallback(this);
@@ -96,11 +97,13 @@ public class ShutterActivity extends SessionAwareActivity {
     private void updateUI(CameraState cameraState) {
         TextView cameraModeText = (TextView) findViewById(R.id.cameraModeText);
         TextView shutterSpeedText = (TextView) findViewById(R.id.shutterSpeedText);
-        TextView focalValueText = (TextView) findViewById(R.id.focusValueText);
+        TextView focalValueText = (TextView) findViewById(R.id.focalValueText);
+        TextView expCompText = (TextView) findViewById(R.id.expCompText);
 
         cameraModeText.setText(cameraState.getTakeMode());
         shutterSpeedText.setText(cameraState.getShutterSpeedValue());
-        focalValueText.setText(String.valueOf(cameraState.getFocalValue()));
+        focalValueText.setText(String.format(FOCAL_VALUE, String.valueOf(cameraState.getFocalValue())));
+        expCompText.setText(String.valueOf(cameraState.getExpComp()));
     }
 
     private void switchToShutterMode() {
@@ -143,5 +146,4 @@ public class ShutterActivity extends SessionAwareActivity {
             // do nothing
         }
     }
-
 }

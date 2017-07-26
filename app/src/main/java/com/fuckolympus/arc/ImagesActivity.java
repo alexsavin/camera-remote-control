@@ -106,7 +106,9 @@ public class ImagesActivity extends SessionAwareActivity {
                 imageView = (ImageView) convertView;
             }
 
-            session.getCameraApi().getThumbnail(imageFiles.get(position).name, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT,
+            ImageFile imageFile = imageFiles.get(position);
+            String fileName = String.format("%s/%s", imageFile.path, imageFile.name);
+            session.getCameraApi().getThumbnail(fileName, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT,
                     new Callback<Bitmap>() {
                         @Override
                         public void apply(Bitmap arg) {

@@ -5,9 +5,9 @@ package com.fuckolympus.arc.camera.vo;
  */
 public class ImageFile {
 
+    public String path;
+
     public String name;
 
     public long size;
-
-    public String thumbnailPath;
 }

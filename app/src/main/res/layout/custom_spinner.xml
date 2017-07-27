@@ -1,0 +1,16 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/customSpinnerMerge">
+    <Button
+            android:text="@string/add_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/addBtn" android:layout_weight="1" android:textSize="24sp"/>
+    <TextView
+            android:text="@string/default_prop_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/valueText" android:layout_weight="1" android:textAlignment="center"
+            android:textSize="24sp" android:layout_toRightOf="@+id/addBtn" android:layout_toEndOf="@+id/addBtn"/>
+    <Button
+            android:text="@string/sub_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/subBtn" android:layout_weight="1" android:textSize="24sp"
+            android:layout_toRightOf="@+id/valueText" android:layout_toEndOf="@+id/valueText"/>
+</merge>

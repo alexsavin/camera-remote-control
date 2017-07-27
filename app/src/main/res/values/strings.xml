@@ -27,6 +27,10 @@
     <string name="confirm_power_off">Do you want to switch camera off?</string>
     <string name="yes_btn">Yes</string>
     <string name="no_btn">No</string>
+    <string name="ok_btn">OK</string>
+    <string name="cancel_btn">Cancel</string>
     <string name="totality_time_label">Totality time</string>
     <string name="part_phase_label">PARTIAL PHASE</string>
+    <string name="add_btn">+</string>
+    <string name="sub_btn">-</string>
 </resources>

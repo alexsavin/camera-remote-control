@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import com.fuckolympus.arc.camera.api.CameraState;
 import com.fuckolympus.arc.camera.vo.Caminfo;
+import com.fuckolympus.arc.camera.vo.Desclist;
 import com.fuckolympus.arc.error.CustomExceptionHandler;
+import com.fuckolympus.arc.settings.Settings;
 import com.fuckolympus.arc.util.Callback;
 
 public class MainActivity extends SessionAwareActivity {
@@ -46,8 +49,35 @@ public class MainActivity extends SessionAwareActivity {
                     @Override
                     public void apply(Caminfo arg) {
                         updateUI(SUCCSESS_FLAG, arg.model);
+                        switchToRecMode();
                     }
                 }, failureCallback);
+    }
+
+    private void switchToRecMode() {
+        session.getCameraApi().switchToRecMode(new Callback<String>() {
+            @Override
+            public void apply(String arg) {
+                getCameraProps();
+            }
+        }, failureCallback);
+    }
+
+    private void getCameraProps() {
+        session.getCameraApi().getCameraProps(new Callback<Desclist>() {
+            @Override
+            public void apply(Desclist arg) {
+                CameraState cameraState = new CameraState.CameraStateBuilder().setDesclist(arg).build();
+                session.setCameraState(cameraState);
+                readSettings();
+            }
+        }, failureCallback);
+    }
+
+    private void readSettings() {
+        CameraState cameraState = session.getCameraState();
+        Settings settings = new Settings(this, cameraState);
+        session.setSettings(settings);
     }
 
     private class FailureCallback implements Callback<String> {

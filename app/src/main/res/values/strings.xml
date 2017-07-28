@@ -29,8 +29,20 @@
     <string name="no_btn">No</string>
     <string name="ok_btn">OK</string>
     <string name="cancel_btn">Cancel</string>
+    <!-- settings activity -->
     <string name="totality_time_label">Totality time</string>
+    <string name="totality_duration_label">Totality duration</string>
     <string name="part_phase_label">PARTIAL PHASE</string>
+    <string name="camera_mode_label">Camera mode</string>
+    <string name="shut_speed_label">Shutter speed</string>
+    <string name="focal_value_label">Aperture</string>
     <string name="add_btn">+</string>
     <string name="sub_btn">-</string>
+    <!-- preferences -->
+    <string name="preference_file_name">com.fuckolympus.arc.config</string>
+    <string name="totality_time">totality.time</string>
+    <string name="totality_duration">totality.duration</string>
+    <string name="partial_phase_take_mode">partial.phase.take.mode</string>
+    <string name="partial_phase_shut_speed">partial.phase.shut.speed</string>
+    <string name="partial_phase_focal_value">partial.phase.focal.value</string>
 </resources>

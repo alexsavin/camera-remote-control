@@ -46,6 +46,11 @@ public class CameraApi {
 
     public static final String GET_THUMBNAIL = "/get_thumbnail.cgi?DIR=%s";
 
+    public static final String TAKEMODE_PROP = "takemode";
+    public static final String FOCALVALUE_PROP = "focalvalue";
+    public static final String SHUTSPEEDVALUE_PROP = "shutspeedvalue";
+    public static final String EXPCOMP_PROP = "expcomp";
+
     private Context context;
 
     private String basePath = "/DCIM/100OLYMP";

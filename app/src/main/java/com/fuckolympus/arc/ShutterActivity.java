@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import com.fuckolympus.arc.camera.api.CameraState;
 import com.fuckolympus.arc.camera.api.ShutterMode;
-import com.fuckolympus.arc.camera.vo.Desclist;
 import com.fuckolympus.arc.util.Callback;
 import com.fuckolympus.arc.util.DefaultFailureCallback;
 
@@ -61,7 +60,8 @@ public class ShutterActivity extends SessionAwareActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        switchToRecMode();
+        updateUI(session.getCameraState());
+        switchToShutterMode();
     }
 
     @Override
@@ -70,40 +70,16 @@ public class ShutterActivity extends SessionAwareActivity {
         ShutterActivity.this.startActivity(intent);
     }
 
-    private void switchToRecMode() {
-        session.getCameraApi().switchToRecMode(new Callback<String>() {
-            @Override
-            public void apply(String arg) {
-                getCameraProps();
-            }
-        }, failureCallback);
-    }
-
-    private void getCameraProps() {
-        session.getCameraApi().getCameraProps(new Callback<Desclist>() {
-            @Override
-            public void apply(Desclist arg) {
-                CameraState cameraState = new CameraState.CameraStateBuilder()
-                        .withTakeMode(arg.getTakeMode())
-                        .withShutterSpeedValue(arg.getShutterSpeedValue())
-                        .withFocalValue(arg.getFocalValue())
-                        .build();
-                updateUI(cameraState);
-                switchToShutterMode();
-            }
-        }, failureCallback);
-    }
-
     private void updateUI(CameraState cameraState) {
         TextView cameraModeText = (TextView) findViewById(R.id.cameraModeText);
         TextView shutterSpeedText = (TextView) findViewById(R.id.shutterSpeedText);
         TextView focalValueText = (TextView) findViewById(R.id.focalValueText);
         TextView expCompText = (TextView) findViewById(R.id.expCompText);
 
-        cameraModeText.setText(cameraState.getTakeMode());
-        shutterSpeedText.setText(cameraState.getShutterSpeedValue());
-        focalValueText.setText(String.format(FOCAL_VALUE, String.valueOf(cameraState.getFocalValue())));
-        expCompText.setText(String.valueOf(cameraState.getExpComp()));
+        cameraModeText.setText(cameraState.takeMode);
+        shutterSpeedText.setText(cameraState.shutterSpeedValue);
+        focalValueText.setText(String.format(FOCAL_VALUE, String.valueOf(cameraState.focalValue)));
+        expCompText.setText(String.valueOf(cameraState.expComp));
     }
 
     private void switchToShutterMode() {

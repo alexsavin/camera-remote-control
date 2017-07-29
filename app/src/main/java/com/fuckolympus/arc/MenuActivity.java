@@ -61,7 +61,7 @@ public class MenuActivity extends SessionAwareActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
-                                session.getCameraApi().powerOff(new SuccessPowerOffCallback(), new FailurePowerOffCallback());
+                                session.getCameraApi().powerOff(MenuActivity.this, new SuccessPowerOffCallback(), new FailurePowerOffCallback());
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
                                 break;

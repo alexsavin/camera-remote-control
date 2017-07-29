@@ -51,8 +51,6 @@ public class CameraApi {
     public static final String SHUTSPEEDVALUE_PROP = "shutspeedvalue";
     public static final String EXPCOMP_PROP = "expcomp";
 
-    private Context context;
-
     private String basePath = "/DCIM/100OLYMP";
 
     private XmlParserCreator parserCreator = new XmlParserCreator() {
@@ -68,11 +66,7 @@ public class CameraApi {
 
     private GsonXml gsonXml = new GsonXmlBuilder().setSameNameLists(true).setXmlParserCreator(parserCreator).create();
 
-    public CameraApi(Context context) {
-        this.context = context;
-    }
-
-    public void getCameraInfo(final Callback<Caminfo> successCallback, final Callback<String> failureCallback) {
+    public void getCameraInfo(Context context, final Callback<Caminfo> successCallback, final Callback<String> failureCallback) {
         HttpUtil.makeRequest(context, Request.Method.GET, CAMERA_URL + GET_CAMINFO,
                 new HttpUtil.SuccessResponseHandler() {
                     @Override
@@ -88,19 +82,19 @@ public class CameraApi {
                 new FailureDelegateCallback(failureCallback));
     }
 
-    public void switchToShutterMode(final Callback<String> successCallback, final Callback<String> failureCallback) {
-        makeGetRequest(CAMERA_URL + SWITCH_MODE_SHUTTER, new DelegateCallback(successCallback), new FailureDelegateCallback(failureCallback));
+    public void switchToShutterMode(Context context, final Callback<String> successCallback, final Callback<String> failureCallback) {
+        makeGetRequest(context, CAMERA_URL + SWITCH_MODE_SHUTTER, new DelegateCallback(successCallback), new FailureDelegateCallback(failureCallback));
     }
 
-    public void switchToRecMode(final Callback<String> successCallback, final Callback<String> failureCallback) {
-        makeGetRequest(CAMERA_URL + SWITCH_MODE_REC, new DelegateCallback(successCallback), new FailureDelegateCallback(failureCallback));
+    public void switchToRecMode(Context context, final Callback<String> successCallback, final Callback<String> failureCallback) {
+        makeGetRequest(context, CAMERA_URL + SWITCH_MODE_REC, new DelegateCallback(successCallback), new FailureDelegateCallback(failureCallback));
     }
 
-    public void switchToPlayMode(final Callback<String> successCallback, final Callback<String> failureCallback) {
-        makeGetRequest(CAMERA_URL + SWITCH_MODE_PLAY, new DelegateCallback(successCallback), new FailureDelegateCallback(failureCallback));
+    public void switchToPlayMode(Context context, final Callback<String> successCallback, final Callback<String> failureCallback) {
+        makeGetRequest(context, CAMERA_URL + SWITCH_MODE_PLAY, new DelegateCallback(successCallback), new FailureDelegateCallback(failureCallback));
     }
 
-    public void getImageList(final Callback<List<ImageFile>> successCallback, final Callback<String> failureCallback) {
+    public void getImageList(Context context, final Callback<List<ImageFile>> successCallback, final Callback<String> failureCallback) {
         HttpUtil.makeRequest(context, Request.Method.GET,  String.format(CAMERA_URL + GET_IMGLIST, basePath),
                 new HttpUtil.SuccessResponseHandler() {
                     @Override
@@ -112,7 +106,8 @@ public class CameraApi {
                 new FailureDelegateCallback(failureCallback));
     }
 
-    public void getThumbnail(String imageName, int width, int height, final Callback<Bitmap> successCallback, final Callback<String> failureCallback) {
+    public void getThumbnail(Context context, String imageName, int width, int height,
+                             final Callback<Bitmap> successCallback, final Callback<String> failureCallback) {
         HttpUtil.loadImageRequest(context, String.format(CAMERA_URL + GET_THUMBNAIL, imageName), width, height,
                 new HttpUtil.SuccessImageResponseHandler() {
                     @Override
@@ -122,7 +117,7 @@ public class CameraApi {
                 }, new FailureDelegateCallback(failureCallback));
     }
 
-    public void getCameraProps(final Callback<Desclist> successCallback, final Callback<String> failureCallback) {
+    public void getCameraProps(Context context, final Callback<Desclist> successCallback, final Callback<String> failureCallback) {
         HttpUtil.makeRequest(context, Request.Method.GET, CAMERA_URL + GET_CAMPROP_DESCLIST,
                 new HttpUtil.SuccessResponseHandler() {
                     @Override
@@ -138,16 +133,17 @@ public class CameraApi {
                 new FailureDelegateCallback(failureCallback));
     }
 
-    public void executeShutter(ShutterMode shutterMode, final Callback<String> successCallback, final Callback<String> failureCallback) {
-        makeGetRequest(String.format(CAMERA_URL + EXEC_SHUTTER, shutterMode.getCom()), new DelegateCallback(successCallback),
+    public void executeShutter(Context context, ShutterMode shutterMode,
+                               final Callback<String> successCallback, final Callback<String> failureCallback) {
+        makeGetRequest(context, String.format(CAMERA_URL + EXEC_SHUTTER, shutterMode.getCom()), new DelegateCallback(successCallback),
                 new FailureDelegateCallback(failureCallback));
     }
 
-    public void powerOff(final Callback<String> successCallback, final Callback<String> failureCallback) {
-        makeGetRequest(CAMERA_URL + EXEC_PWOFF, new DelegateCallback(successCallback), new FailureDelegateCallback(failureCallback));
+    public void powerOff(Context context, final Callback<String> successCallback, final Callback<String> failureCallback) {
+        makeGetRequest(context, CAMERA_URL + EXEC_PWOFF, new DelegateCallback(successCallback), new FailureDelegateCallback(failureCallback));
     }
 
-    private void makeGetRequest(String url, final DelegateCallback successCallback, final FailureDelegateCallback failureCallback) {
+    private void makeGetRequest(Context context, String url, final DelegateCallback successCallback, final FailureDelegateCallback failureCallback) {
         HttpUtil.makeRequest(context, Request.Method.GET, url, successCallback, failureCallback);
     }
 

@@ -16,6 +16,7 @@ public class Settings {
 
     public static final String DEF_TOTALITY_TIME = "10:18:00";
     public static final String DEF_TOTALITY_DURATION = "00:02:01";
+    public static final String DEF_TIME_LAPSE_INTERVAL = "00:01:00";
 
     private Context context;
 
@@ -35,6 +36,18 @@ public class Settings {
                 sharedPreferences.getString(context.getString(R.string.partial_phase_shut_speed), cameraState.shutterSpeedValue));
         settingsMap.put(R.string.partial_phase_focal_value,
                 sharedPreferences.getString(context.getString(R.string.partial_phase_focal_value), cameraState.focalValue));
+        settingsMap.put(R.string.time_lapse_interval,
+                sharedPreferences.getString(context.getString(R.string.time_lapse_interval), DEF_TIME_LAPSE_INTERVAL));
+        settingsMap.put(R.string.totality_take_mode,
+                sharedPreferences.getString(context.getString(R.string.totality_take_mode), cameraState.takeMode));
+        settingsMap.put(R.string.totality_min_shut_speed,
+                sharedPreferences.getString(context.getString(R.string.totality_min_shut_speed), cameraState.shutterSpeedValue));
+        settingsMap.put(R.string.totality_min_focal_value,
+                sharedPreferences.getString(context.getString(R.string.totality_min_focal_value), cameraState.focalValue));
+        settingsMap.put(R.string.totality_max_shut_speed,
+                sharedPreferences.getString(context.getString(R.string.totality_max_shut_speed), cameraState.shutterSpeedValue));
+        settingsMap.put(R.string.totality_max_focal_value,
+                sharedPreferences.getString(context.getString(R.string.totality_max_focal_value), cameraState.focalValue));
     }
 
     public void updateByKey(int preferenceKey, String value) {

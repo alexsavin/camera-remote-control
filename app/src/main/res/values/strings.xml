@@ -33,9 +33,11 @@
     <string name="totality_time_label">Totality time</string>
     <string name="totality_duration_label">Totality duration</string>
     <string name="part_phase_label">PARTIAL PHASE</string>
+    <string name="total_phase_label">TOTALITY</string>
     <string name="camera_mode_label">Camera mode</string>
     <string name="shut_speed_label">Shutter speed</string>
     <string name="focal_value_label">Aperture</string>
+    <string name="time_lapse_interval_label">Time lapse interval</string>
     <string name="add_btn">+</string>
     <string name="sub_btn">-</string>
     <!-- preferences -->
@@ -45,4 +47,10 @@
     <string name="partial_phase_take_mode">partial.phase.take.mode</string>
     <string name="partial_phase_shut_speed">partial.phase.shut.speed</string>
     <string name="partial_phase_focal_value">partial.phase.focal.value</string>
+    <string name="time_lapse_interval">time.lapse.interval</string>
+    <string name="totality_take_mode">totality.take.mode</string>
+    <string name="totality_min_shut_speed">partial.phase.shut.speed</string>
+    <string name="totality_min_focal_value">partial.phase.focal.value</string>
+    <string name="totality_max_shut_speed">partial.phase.shut.speed</string>
+    <string name="totality_max_focal_value">partial.phase.focal.value</string>
 </resources>

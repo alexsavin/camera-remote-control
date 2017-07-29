@@ -47,6 +47,20 @@ public class SettingsActivity extends SessionAwareActivity {
         configureSpinner(R.id.takeModePPSpinner, cameraState.getTakeModeEnum(), R.string.partial_phase_take_mode);
         configureSpinner(R.id.shutSpeedPPSpinner, cameraState.getShutterSpeedValueEnum(), R.string.partial_phase_shut_speed);
         configureSpinner(R.id.focalValuePPSpinner, cameraState.getFocalValueEnum(), R.string.partial_phase_focal_value);
+
+        TextView timeLapseIntervalText = (TextView) findViewById(R.id.intervalText);
+        timeLapseIntervalText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimePickerDialog(R.id.intervalText, R.string.time_lapse_interval, true);
+            }
+        });
+
+        configureSpinner(R.id.totalityTakeModeSpinner, cameraState.getTakeModeEnum(), R.string.totality_take_mode);
+        configureSpinner(R.id.totalityMinShutSpeedSpinner, cameraState.getShutterSpeedValueEnum(), R.string.totality_min_shut_speed);
+        configureSpinner(R.id.totalityMinFocalValueSpinner, cameraState.getFocalValueEnum(), R.string.totality_min_focal_value);
+        configureSpinner(R.id.totalityMaxShutSpeedSpinner, cameraState.getShutterSpeedValueEnum(), R.string.totality_max_shut_speed);
+        configureSpinner(R.id.totalityMaxFocalValueSpinner, cameraState.getFocalValueEnum(), R.string.totality_max_focal_value);
     }
 
     private void configureSpinner(int spinnerId, String[] values, final int preferenceKey) {
@@ -86,6 +100,15 @@ public class SettingsActivity extends SessionAwareActivity {
         setSpinnerSelection(R.id.takeModePPSpinner, settings.getByKey(R.string.partial_phase_take_mode));
         setSpinnerSelection(R.id.shutSpeedPPSpinner, settings.getByKey(R.string.partial_phase_shut_speed));
         setSpinnerSelection(R.id.focalValuePPSpinner, settings.getByKey(R.string.partial_phase_focal_value));
+
+        TextView timeLapseIntervalText = (TextView) findViewById(R.id.intervalText);
+        timeLapseIntervalText.setText(settings.getByKey(R.string.time_lapse_interval));
+
+        setSpinnerSelection(R.id.totalityTakeModeSpinner, settings.getByKey(R.string.totality_take_mode));
+        setSpinnerSelection(R.id.totalityMinShutSpeedSpinner, settings.getByKey(R.string.totality_min_shut_speed));
+        setSpinnerSelection(R.id.totalityMinFocalValueSpinner, settings.getByKey(R.string.totality_min_focal_value));
+        setSpinnerSelection(R.id.totalityMaxShutSpeedSpinner, settings.getByKey(R.string.totality_max_shut_speed));
+        setSpinnerSelection(R.id.totalityMaxFocalValueSpinner, settings.getByKey(R.string.totality_max_focal_value));
     }
 
     private void setSpinnerSelection(int spinnerId, String selectedValue) {

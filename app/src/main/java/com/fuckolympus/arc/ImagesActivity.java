@@ -45,7 +45,7 @@ public class ImagesActivity extends SessionAwareActivity {
     }
 
     private void switchToPlayMode() {
-        session.getCameraApi().switchToPlayMode(new Callback<String>() {
+        session.getCameraApi().switchToPlayMode(this, new Callback<String>() {
             @Override
             public void apply(String arg) {
                 getImages();
@@ -54,7 +54,7 @@ public class ImagesActivity extends SessionAwareActivity {
     }
 
     private void getImages() {
-        session.getCameraApi().getImageList(new Callback<List<ImageFile>>() {
+        session.getCameraApi().getImageList(this, new Callback<List<ImageFile>>() {
             @Override
             public void apply(List<ImageFile> arg) {
                 GridView imagesGrid = (GridView) findViewById(R.id.imagesGrid);
@@ -108,7 +108,7 @@ public class ImagesActivity extends SessionAwareActivity {
 
             ImageFile imageFile = imageFiles.get(position);
             String fileName = String.format("%s/%s", imageFile.path, imageFile.name);
-            session.getCameraApi().getThumbnail(fileName, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT,
+            session.getCameraApi().getThumbnail(context, fileName, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT,
                     new Callback<Bitmap>() {
                         @Override
                         public void apply(Bitmap arg) {

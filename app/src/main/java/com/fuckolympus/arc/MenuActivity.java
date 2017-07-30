@@ -38,7 +38,7 @@ public class MenuActivity extends SessionAwareActivity {
         eclipseActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuActivity.this, EclipseActivity.class);
+                Intent intent = new Intent(MenuActivity.this, EclipseMenuActivity.class);
                 MenuActivity.this.startActivity(intent);
             }
         });

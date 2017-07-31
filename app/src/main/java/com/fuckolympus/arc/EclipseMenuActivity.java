@@ -17,7 +17,7 @@ public class EclipseMenuActivity extends SessionAwareActivity {
             @Override
             public void onClick(View v) {
                 // todo - check time
-                startEclipseActivity();
+                startEclipseActivity(false);
             }
         });
 
@@ -26,13 +26,16 @@ public class EclipseMenuActivity extends SessionAwareActivity {
             @Override
             public void onClick(View v) {
                 // todo - check time
-                startEclipseActivity();
+                startEclipseActivity(true);
             }
         });
     }
 
-    private void startEclipseActivity() {
+    private void startEclipseActivity(boolean totality) {
         Intent intent = new Intent(EclipseMenuActivity.this, EclipseActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(getString(R.string.totality_flag), totality);
+        intent.putExtras(bundle);
         EclipseMenuActivity.this.startActivity(intent);
     }
 

@@ -11,4 +11,47 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         tools:context="com.fuckolympus.arc.EclipseActivity">
 
+    <Button
+            android:text="@string/start_process_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"
+            android:layout_marginBottom="29dp" android:id="@+id/startProcessBtn"/>
+    <TextView
+            android:text="@string/default_prop_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            android:id="@+id/currentModeText" android:textAlignment="center" android:textSize="24sp"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp" android:id="@+id/paramsLayout" android:layout_below="@+id/currentModeText"
+            android:layout_alignParentLeft="true" android:layout_alignParentStart="true">
+        <TextView
+                android:text="@string/default_prop_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/eCameraModeText" android:layout_weight="1" android:textAlignment="center"/>
+        <TextView
+                android:text="@string/default_prop_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/eFocalValueText" android:layout_weight="1" android:textAlignment="center"/>
+        <TextView
+                android:text="@string/default_prop_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/eShutSpeedText" android:layout_weight="1" android:textAlignment="center"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_below="@+id/paramsLayout" android:layout_centerHorizontal="true"
+            android:layout_marginTop="76dp" android:id="@+id/framesLayout">
+        <TextView
+                android:text="@string/frames_number_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/framesLabel" android:layout_weight="1"/>
+        <TextView
+                android:text="@string/default_prop_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/framesNumberText" android:layout_weight="1" android:textAlignment="center"/>
+    </LinearLayout>
 </RelativeLayout>

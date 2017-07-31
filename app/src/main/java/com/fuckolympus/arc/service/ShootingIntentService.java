@@ -1,8 +1,10 @@
 package com.fuckolympus.arc.service;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import com.fuckolympus.arc.session.Session;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -12,17 +14,19 @@ import android.content.Context;
  * helper methods.
  */
 public class ShootingIntentService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    private static final String ACTION_FOO = "com.fuckolympus.arc.service.action.FOO";
-    private static final String ACTION_BAZ = "com.fuckolympus.arc.service.action.BAZ";
+
+    private static final String ACTION_PARTIAL_PHASE = "com.fuckolympus.arc.service.action.PARTIAL_PHASE";
+    private static final String ACTION_TOTALITY_PHASE = "com.fuckolympus.arc.service.action.TOTALITY_PHASE";
 
     // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "com.fuckolympus.arc.service.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "com.fuckolympus.arc.service.extra.PARAM2";
+    //private static final String EXTRA_PARAM1 = "com.fuckolympus.arc.service.extra.PARAM1";
+    //private static final String EXTRA_PARAM2 = "com.fuckolympus.arc.service.extra.PARAM2";
+
+    private Session session;
 
     public ShootingIntentService() {
         super("ShootingIntentService");
+        session = Session.getInstance();
     }
 
     /**
@@ -32,11 +36,11 @@ public class ShootingIntentService extends IntentService {
      * @see IntentService
      */
     // TODO: Customize helper method
-    public static void startActionFoo(Context context, String param1, String param2) {
+    public static void startActionPartialPhase(Context context) {
         Intent intent = new Intent(context, ShootingIntentService.class);
-        intent.setAction(ACTION_FOO);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
+        intent.setAction(ACTION_PARTIAL_PHASE);
+        //intent.putExtra(EXTRA_PARAM1, param1);
+        //intent.putExtra(EXTRA_PARAM2, param2);
         context.startService(intent);
     }
 
@@ -47,11 +51,11 @@ public class ShootingIntentService extends IntentService {
      * @see IntentService
      */
     // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
+    public static void startActionTotalityPhase(Context context) {
         Intent intent = new Intent(context, ShootingIntentService.class);
-        intent.setAction(ACTION_BAZ);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
+        intent.setAction(ACTION_TOTALITY_PHASE);
+        //intent.putExtra(EXTRA_PARAM1, param1);
+        //intent.putExtra(EXTRA_PARAM2, param2);
         context.startService(intent);
     }
 
@@ -59,14 +63,14 @@ public class ShootingIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-            if (ACTION_FOO.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionFoo(param1, param2);
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
+            if (ACTION_PARTIAL_PHASE.equals(action)) {
+                //final String param1 = intent.getStringExtra(EXTRA_PARAM1);
+                //final String param2 = intent.getStringExtra(EXTRA_PARAM2);
+                handleActionPartialPhase();
+            } else if (ACTION_TOTALITY_PHASE.equals(action)) {
+                //final String param1 = intent.getStringExtra(EXTRA_PARAM1);
+                //final String param2 = intent.getStringExtra(EXTRA_PARAM2);
+                handleActionTotalityPhase();
             }
         }
     }
@@ -75,17 +79,21 @@ public class ShootingIntentService extends IntentService {
      * Handle action Foo in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionFoo(String param1, String param2) {
+    private void handleActionPartialPhase() {
+        Log.w(this.getClass().getName(), "start partial phase");
+
         // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
+        //throw new UnsupportedOperationException("Not yet implemented");
     }
 
     /**
      * Handle action Baz in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionBaz(String param1, String param2) {
+    private void handleActionTotalityPhase() {
+        Log.w(this.getClass().getName(), "start totality phase");
+
         // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
+        //throw new UnsupportedOperationException("Not yet implemented");
     }
 }

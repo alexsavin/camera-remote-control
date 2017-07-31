@@ -30,6 +30,9 @@
     <string name="no_btn">No</string>
     <string name="ok_btn">OK</string>
     <string name="cancel_btn">Cancel</string>
+    <string name="start_process_btn">START !!!</string>
+    <string name="confirm_start_process">Do you want start shooting?</string>
+    <string name="frames_number_label">Frames number</string>
     <!-- settings activity -->
     <string name="totality_time_label">Totality time</string>
     <string name="totality_duration_label">Totality duration</string>
@@ -54,4 +57,6 @@
     <string name="totality_min_focal_value">partial.phase.focal.value</string>
     <string name="totality_max_shut_speed">partial.phase.shut.speed</string>
     <string name="totality_max_focal_value">partial.phase.focal.value</string>
+
+    <string name="totality_flag">totality.flag</string>
 </resources>

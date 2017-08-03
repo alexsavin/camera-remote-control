@@ -5,5 +5,5 @@ package com.fuckolympus.arc.util;
  */
 public interface Callback<T> {
 
-    void apply(T arg);
+    void apply(final T arg);
 }

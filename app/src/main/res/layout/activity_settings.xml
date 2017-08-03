@@ -57,20 +57,6 @@
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" android:id="@+id/takeModePPLayout"
-                    android:layout_marginTop="10dp">
-                <TextView
-                        android:text="@string/camera_mode_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:id="@+id/takeModePPLabel" android:layout_weight="1"/>
-                <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/takeModePPSpinner" android:layout_weight="1"/>
-            </LinearLayout>
-            <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
                     android:layout_height="match_parent" android:id="@+id/shutSpeedPPLayout"
                     android:layout_marginTop="10dp">
                 <TextView
@@ -119,20 +105,6 @@
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" android:id="@+id/totalityTakeModeLayout"
-                    android:layout_marginTop="10dp">
-                <TextView
-                        android:text="@string/camera_mode_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:id="@+id/totalityTakeModeLabel" android:layout_weight="1"/>
-                <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/totalityTakeModeSpinner" android:layout_weight="1"/>
-            </LinearLayout>
-            <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
                     android:layout_height="match_parent" android:id="@+id/totalityShutSpeedLayout"
                     android:layout_marginTop="10dp">
                 <TextView
@@ -160,11 +132,7 @@
                 <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/totalityMinFocalValueSpinner" android:layout_weight="1"/>
-                <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/totalityMaxFocalValueSpinner" android:layout_weight="1"/>
+                        android:id="@+id/totalityFocalValueSpinner" android:layout_weight="1"/>
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

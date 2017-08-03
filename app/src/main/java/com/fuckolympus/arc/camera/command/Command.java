@@ -1,15 +1,17 @@
 package com.fuckolympus.arc.camera.command;
 
+import android.app.IntentService;
 import android.content.Context;
 import com.fuckolympus.arc.util.Callback;
 import com.fuckolympus.arc.util.DefaultFailureCallback;
+import com.fuckolympus.arc.util.LogFailureCallback;
 
 /**
  * Created by alex on 2.8.17.
  */
 public abstract class Command<T> {
 
-    protected Command<?> nextCommand;
+    Command<?> nextCommand;
 
     public abstract void apply(Callback<T> nextCommandCallback, Callback<String> failureCallback);
 
@@ -19,6 +21,6 @@ public abstract class Command<T> {
             public void apply(T arg) {
                 nextCommand.execute(context);
             }
-        }, new DefaultFailureCallback(context));
+        }, (context instanceof IntentService ? new LogFailureCallback() : new DefaultFailureCallback(context)));
     }
 }

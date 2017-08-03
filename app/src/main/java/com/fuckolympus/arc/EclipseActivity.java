@@ -13,7 +13,11 @@ import com.fuckolympus.arc.eclipse.EclipseUtils;
 import com.fuckolympus.arc.service.ShootingIntentService;
 import com.fuckolympus.arc.settings.Settings;
 import com.fuckolympus.arc.util.Callback;
+import com.fuckolympus.arc.util.StubCallback;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EclipseActivity extends SessionAwareActivity {
 
@@ -38,7 +42,7 @@ public class EclipseActivity extends SessionAwareActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == DialogInterface.BUTTON_POSITIVE) {
                             if (totalityFlag) {
-                                ShootingIntentService.startActionTotalityPhase(EclipseActivity.this);
+                                startTotality();
                             } else {
                                 startPartialPhaseTimeLapse();
                             }
@@ -57,6 +61,49 @@ public class EclipseActivity extends SessionAwareActivity {
                 alertDialog.show();
             }
         });
+    }
+
+    private void startTotality() {
+        String minShutSpeedValue = session.getSettings().getByKey(R.string.totality_min_shut_speed);
+        String maxShutSpeedValue = session.getSettings().getByKey(R.string.totality_max_shut_speed);
+        String[] shutSpeedValues = session.getCameraState().getShutterSpeedValueEnum();
+        List<String> shutSpeedSet = new ArrayList<>();
+        boolean foundMin = false;
+        for (String shutSpeedValue : shutSpeedValues) {
+            if (shutSpeedValue.equals(minShutSpeedValue)) {
+                foundMin = true;
+            }
+            if (shutSpeedValue.equals(maxShutSpeedValue)) {
+                shutSpeedSet.add(shutSpeedValue);
+                foundMin = false;
+            }
+            if (foundMin) {
+                shutSpeedSet.add(shutSpeedValue);
+            }
+        }
+
+        TextView framesNumberText = (TextView) findViewById(R.id.framesNumberText);
+        framesNumberText.setText(String.valueOf(shutSpeedSet.size()));
+
+        final String focalValue = session.getSettings().getByKey(R.string.totality_focal_value);
+
+        CommandChain commandChain = new CommandChain.CommandChainBuilder()
+                .addCommand(new Command<String>() {
+                    @Override
+                    public void apply(Callback<String> nextCommandCallback, Callback<String> failureCallback) {
+                        session.getCameraApi().switchToRecMode(EclipseActivity.this, nextCommandCallback, failureCallback);
+                    }
+                }).addCommand(new Command<String>() {
+                    @Override
+                    public void apply(final Callback<String> nextCommandCallback, final Callback<String> failureCallback) {
+                        session.getCameraApi().setCameraProp(EclipseActivity.this, CameraApi.FOCALVALUE_PROP, focalValue,
+                                new StubCallback<String>(), failureCallback);
+                    }
+                }).build();
+
+        commandChain.run(this);
+
+        ShootingIntentService.startActionTotalityPhase(EclipseActivity.this, shutSpeedSet.toArray(new String[shutSpeedSet.size()]));
     }
 
     @Override
@@ -91,11 +138,11 @@ public class EclipseActivity extends SessionAwareActivity {
         currentModeText.setText(totalityFlag ? R.string.total_phase_label : R.string.part_phase_label);
 
         TextView eCameraModeText = (TextView) findViewById(R.id.eCameraModeText);
-        eCameraModeText.setText(settings.getByKey(totalityFlag ? R.string.totality_take_mode : R.string.partial_phase_take_mode));
+        eCameraModeText.setText(session.getCameraState().takeMode);
 
         TextView eFocalValueText = (TextView) findViewById(R.id.eFocalValueText);
         eFocalValueText.setText(totalityFlag
-                ? String.format("F%s - F%s", settings.getByKey(R.string.totality_min_focal_value), settings.getByKey(R.string.totality_max_focal_value))
+                ? String.format("F%s", settings.getByKey(R.string.totality_focal_value))
                 : String.format("F%s", settings.getByKey(R.string.partial_phase_focal_value)));
 
         TextView eShutSpeedText = (TextView) findViewById(R.id.eShutSpeedText);
@@ -122,26 +169,6 @@ public class EclipseActivity extends SessionAwareActivity {
                     @Override
                     public void apply(Callback<String> nextCommandCallback, Callback<String> failureCallback) {
                         session.getCameraApi().switchToRecMode(EclipseActivity.this, nextCommandCallback, failureCallback);
-                    }
-                })
-                .addCommand(new Command<String>() {
-                    @Override
-                    public void apply(final Callback<String> nextCommandCallback, final Callback<String> failureCallback) {
-                        session.getCameraApi().setCameraProp(EclipseActivity.this, CameraApi.TAKEMODE_PROP, cameraMode,
-                                nextCommandCallback, failureCallback);
-                    }
-                })
-                .addCommand(new Command<String>() {
-                    @Override
-                    public void apply(final Callback<String> nextCommandCallback, final Callback<String> failureCallback) {
-                        session.getCameraApi().getCameraProp(EclipseActivity.this,
-                                CameraApi.TAKEMODE_PROP, new Callback<String>() {
-                                    @Override
-                                    public void apply(String arg) {
-                                        session.getCameraState().takeMode = arg;
-                                        nextCommandCallback.apply(arg);
-                                    }
-                                }, failureCallback);
                     }
                 })
                 .addCommand(new Command<String>() {

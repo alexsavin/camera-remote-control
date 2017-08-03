@@ -53,10 +53,9 @@
     <string name="partial_phase_focal_value">partial.phase.focal.value</string>
     <string name="time_lapse_interval">time.lapse.interval</string>
     <string name="totality_take_mode">totality.take.mode</string>
-    <string name="totality_min_shut_speed">partial.phase.shut.speed</string>
-    <string name="totality_min_focal_value">partial.phase.focal.value</string>
-    <string name="totality_max_shut_speed">partial.phase.shut.speed</string>
-    <string name="totality_max_focal_value">partial.phase.focal.value</string>
+    <string name="totality_focal_value">totality.phase.focal.value</string>
+    <string name="totality_min_shut_speed">totality.phase.min.shut.speed</string>
+    <string name="totality_max_shut_speed">totality.phase.max.shut.speed</string>
 
     <string name="totality_flag">totality.flag</string>
 </resources>

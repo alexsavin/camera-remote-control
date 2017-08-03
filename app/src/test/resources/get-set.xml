@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<get>
+    <value>0044-0033_0231x0173</value>
+</get>
+
+<set>
+<value>10.0</value>
+</set>
+
+<response>
+<drivemode>selftimer</drivemode>
+<cameradrivemode>selftimer</cameradrivemode>
+</response>

@@ -2,9 +2,9 @@ package com.fuckolympus.arc.camera.api;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import com.android.volley.Request;
 import com.fuckolympus.arc.camera.vo.Caminfo;
 import com.fuckolympus.arc.camera.vo.Desclist;
+import com.fuckolympus.arc.camera.vo.Get;
 import com.fuckolympus.arc.camera.vo.ImageFile;
 import com.fuckolympus.arc.error.CommunicationException;
 import com.fuckolympus.arc.util.Callback;
@@ -40,6 +40,10 @@ public class CameraApi {
 
     public static final String GET_CAMPROP_DESCLIST = "/get_camprop.cgi?com=desc&propname=desclist";
 
+    public static final String SET_CAMPROP = "/set_camprop.cgi?com=set&propname=%s";
+
+    public static final String GET_CAMPROP = "/get_camprop.cgi?com=get&propname=%s";
+
     public static final String EXEC_PWOFF = "/exec_pwoff.cgi";
 
     public static final String GET_IMGLIST = "/get_imglist.cgi?DIR=%s";
@@ -50,6 +54,8 @@ public class CameraApi {
     public static final String FOCALVALUE_PROP = "focalvalue";
     public static final String SHUTSPEEDVALUE_PROP = "shutspeedvalue";
     public static final String EXPCOMP_PROP = "expcomp";
+
+    public static final String SET_VALUE_XML = "<set><value>%s</value></set>";
 
     private String basePath = "/DCIM/100OLYMP";
 
@@ -67,7 +73,7 @@ public class CameraApi {
     private GsonXml gsonXml = new GsonXmlBuilder().setSameNameLists(true).setXmlParserCreator(parserCreator).create();
 
     public void getCameraInfo(Context context, final Callback<Caminfo> successCallback, final Callback<String> failureCallback) {
-        HttpUtil.makeRequest(context, Request.Method.GET, CAMERA_URL + GET_CAMINFO,
+        HttpUtil.makeGetRequest(context, CAMERA_URL + GET_CAMINFO,
                 new HttpUtil.SuccessResponseHandler() {
                     @Override
                     public void handle(String response) {
@@ -95,7 +101,7 @@ public class CameraApi {
     }
 
     public void getImageList(Context context, final Callback<List<ImageFile>> successCallback, final Callback<String> failureCallback) {
-        HttpUtil.makeRequest(context, Request.Method.GET,  String.format(CAMERA_URL + GET_IMGLIST, basePath),
+        HttpUtil.makeGetRequest(context, String.format(CAMERA_URL + GET_IMGLIST, basePath),
                 new HttpUtil.SuccessResponseHandler() {
                     @Override
                     public void handle(String response) {
@@ -118,7 +124,7 @@ public class CameraApi {
     }
 
     public void getCameraProps(Context context, final Callback<Desclist> successCallback, final Callback<String> failureCallback) {
-        HttpUtil.makeRequest(context, Request.Method.GET, CAMERA_URL + GET_CAMPROP_DESCLIST,
+        HttpUtil.makeGetRequest(context, CAMERA_URL + GET_CAMPROP_DESCLIST,
                 new HttpUtil.SuccessResponseHandler() {
                     @Override
                     public void handle(String response) {
@@ -144,7 +150,7 @@ public class CameraApi {
     }
 
     private void makeGetRequest(Context context, String url, final DelegateCallback successCallback, final FailureDelegateCallback failureCallback) {
-        HttpUtil.makeRequest(context, Request.Method.GET, url, successCallback, failureCallback);
+        HttpUtil.makeGetRequest(context, url, successCallback, failureCallback);
     }
 
     private List<ImageFile> parseImageList(String response) {
@@ -165,6 +171,24 @@ public class CameraApi {
 
         Collections.reverse(imageFiles);
         return imageFiles;
+    }
+
+    public void setCameraProp(Context context, String prop, String value,
+                              final Callback<String> successCallback, final Callback<String> failureCallback) {
+        HttpUtil.makePostRequest(context, CAMERA_URL + String.format(SET_CAMPROP, prop), String.format(SET_VALUE_XML, value),
+                new DelegateCallback(successCallback), new FailureDelegateCallback(failureCallback));
+    }
+
+    public void getCameraProp(Context context, String prop,
+                              final Callback<String> successCallback, final Callback<String> failureCallback) {
+        HttpUtil.makeGetRequest(context, CAMERA_URL + String.format(GET_CAMPROP, prop),
+                new HttpUtil.SuccessResponseHandler() {
+                    @Override
+                    public void handle(String response) {
+                        Get get = gsonXml.fromXml(response, Get.class);
+                        successCallback.apply(get.value);
+                    }
+                }, new FailureDelegateCallback(failureCallback));
     }
 
     private class DelegateCallback implements HttpUtil.SuccessResponseHandler {

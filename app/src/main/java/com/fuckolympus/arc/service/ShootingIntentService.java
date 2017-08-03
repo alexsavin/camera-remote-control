@@ -3,8 +3,12 @@ package com.fuckolympus.arc.service;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
+import com.fuckolympus.arc.camera.api.ShutterMode;
 import com.fuckolympus.arc.session.Session;
+import com.fuckolympus.arc.util.Callback;
+import com.fuckolympus.arc.util.DefaultFailureCallback;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -19,8 +23,8 @@ public class ShootingIntentService extends IntentService {
     private static final String ACTION_TOTALITY_PHASE = "com.fuckolympus.arc.service.action.TOTALITY_PHASE";
 
     // TODO: Rename parameters
-    //private static final String EXTRA_PARAM1 = "com.fuckolympus.arc.service.extra.PARAM1";
-    //private static final String EXTRA_PARAM2 = "com.fuckolympus.arc.service.extra.PARAM2";
+    private static final String FRAMES_COUNT = "com.fuckolympus.arc.service.extra.FRAMES_COUNT";
+    private static final String MS_INTERVAL = "com.fuckolympus.arc.service.extra.MS_INTERVAL";
 
     private Session session;
 
@@ -36,11 +40,11 @@ public class ShootingIntentService extends IntentService {
      * @see IntentService
      */
     // TODO: Customize helper method
-    public static void startActionPartialPhase(Context context) {
+    public static void startActionPartialPhase(Context context, long framesNumber, long msInterval) {
         Intent intent = new Intent(context, ShootingIntentService.class);
         intent.setAction(ACTION_PARTIAL_PHASE);
-        //intent.putExtra(EXTRA_PARAM1, param1);
-        //intent.putExtra(EXTRA_PARAM2, param2);
+        intent.putExtra(FRAMES_COUNT, framesNumber);
+        intent.putExtra(MS_INTERVAL, msInterval);
         context.startService(intent);
     }
 
@@ -64,9 +68,9 @@ public class ShootingIntentService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_PARTIAL_PHASE.equals(action)) {
-                //final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                //final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionPartialPhase();
+                final long framesCount = intent.getLongExtra(FRAMES_COUNT, 0L);
+                final long msInterval = intent.getLongExtra(MS_INTERVAL, 5000L);
+                handleActionPartialPhase(framesCount, msInterval);
             } else if (ACTION_TOTALITY_PHASE.equals(action)) {
                 //final String param1 = intent.getStringExtra(EXTRA_PARAM1);
                 //final String param2 = intent.getStringExtra(EXTRA_PARAM2);
@@ -75,15 +79,10 @@ public class ShootingIntentService extends IntentService {
         }
     }
 
-    /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionPartialPhase() {
-        Log.w(this.getClass().getName(), "start partial phase");
+    private void handleActionPartialPhase(final long framesCount, final long msInterval) {
+        Log.w(this.getClass().getName(), "start partial phase. Frames count: " + framesCount);
 
-        // TODO: Handle action Foo
-        //throw new UnsupportedOperationException("Not yet implemented");
+        shoot(1L, framesCount, msInterval);
     }
 
     /**
@@ -95,5 +94,31 @@ public class ShootingIntentService extends IntentService {
 
         // TODO: Handle action Baz
         //throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void shoot(final long currentFrame, final long frameCount, final long msInterval) {
+        session.getCameraApi().executeShutter(ShootingIntentService.this, ShutterMode.FST_SND_PUSH,
+                new Callback<String>() {
+                    @Override
+                    public void apply(String arg) {
+                        session.getCameraApi().executeShutter(ShootingIntentService.this, ShutterMode.SND_FST_RELEASE,
+                                new Callback<String>() {
+                                    @Override
+                                    public void apply(final String arg) {
+                                        Log.w(ShootingIntentService.this.getClass().getName(), "current frame " + currentFrame);
+                                        if (currentFrame < frameCount) {
+                                            final Handler handler = new Handler();
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    shoot(currentFrame + 1, frameCount, msInterval);
+                                                }
+                                            }, msInterval);
+                                        }
+                                    }
+                                },
+                                new DefaultFailureCallback(ShootingIntentService.this));
+                    }
+                }, new DefaultFailureCallback(ShootingIntentService.this));
     }
 }

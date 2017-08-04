@@ -17,7 +17,8 @@ public class Settings {
     public static final String DEF_TOTALITY_TIME = "10:18:00";
     public static final String DEF_TOTALITY_DURATION = "00:02:01";
     public static final String DEF_TIME_LAPSE_INTERVAL = "00:01:00";
-    public static final String DEF_SHUT_SPEED_SET = "1\", 1000";
+    public static final String DEF_SHUT_SPEED_SET = "4\", 1\", 2, 4, 8, 15, 30, 60, 125, 250, 500, 1000, 2000";
+    public static final String DEF_TOTALITY_FOCAL_VALUE = "11";
 
     private Context context;
 
@@ -40,7 +41,7 @@ public class Settings {
         settingsMap.put(R.string.totality_shut_speed_set,
                 sharedPreferences.getString(context.getString(R.string.totality_shut_speed_set), DEF_SHUT_SPEED_SET));
         settingsMap.put(R.string.totality_focal_value,
-                sharedPreferences.getString(context.getString(R.string.totality_focal_value), cameraState.focalValue));
+                sharedPreferences.getString(context.getString(R.string.totality_focal_value), DEF_TOTALITY_FOCAL_VALUE));
     }
 
     public void updateByKey(int preferenceKey, String value) {

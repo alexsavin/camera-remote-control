@@ -3,7 +3,10 @@ package com.fuckolympus.arc.service;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Handler;
+import android.os.PowerManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import com.fuckolympus.arc.camera.api.CameraApi;
 import com.fuckolympus.arc.camera.api.ShutterMode;
@@ -22,6 +25,9 @@ import com.fuckolympus.arc.util.DefaultFailureCallback;
  */
 public class ShootingIntentService extends IntentService {
 
+    public static final String BROADCAST_ACTION = "com.fuckolympis.arc.BROADCAST";
+    public static final String EXTENDED_DATA_STATUS = "com.fuckolympis.arc.STATUS";
+
     private static final String ACTION_PARTIAL_PHASE = "com.fuckolympus.arc.service.action.PARTIAL_PHASE";
     private static final String ACTION_TOTALITY_PHASE = "com.fuckolympus.arc.service.action.TOTALITY_PHASE";
 
@@ -30,6 +36,9 @@ public class ShootingIntentService extends IntentService {
     private static final String SHUT_SPEED_SET = "com.fuckolympus.arc.service.extra.SHUT_SPEED_SET";
 
     private Session session;
+
+    private PowerManager.WakeLock wakeLock;
+    private WifiManager.WifiLock wifiLock;
 
     public ShootingIntentService() {
         super("ShootingIntentService");
@@ -56,7 +65,6 @@ public class ShootingIntentService extends IntentService {
      *
      * @see IntentService
      */
-    // TODO: Customize helper method
     public static void startActionTotalityPhase(Context context, String[] shutSpeedSet) {
         Intent intent = new Intent(context, ShootingIntentService.class);
         intent.setAction(ACTION_TOTALITY_PHASE);
@@ -67,10 +75,19 @@ public class ShootingIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
+            // acquire locks
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "com.fuckolympus.arc.power.lock");
+            wakeLock.acquire();
+
+            WifiManager wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            wifiLock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, "com.fuckolympus.arc.wifi.lock");
+            wifiLock.acquire();
+
             final String action = intent.getAction();
             if (ACTION_PARTIAL_PHASE.equals(action)) {
                 final long framesCount = intent.getLongExtra(FRAMES_COUNT, 0L);
-                final long msInterval = intent.getLongExtra(MS_INTERVAL, 5000L);
+                final long msInterval = intent.getLongExtra(MS_INTERVAL, 30000L);
                 handleActionPartialPhase(framesCount, msInterval);
             } else if (ACTION_TOTALITY_PHASE.equals(action)) {
                 final String[] shutSpeedSet = intent.getStringArrayExtra(SHUT_SPEED_SET);
@@ -119,15 +136,23 @@ public class ShootingIntentService extends IntentService {
                                 @Override
                                 public void apply(final String arg) {
                                     Log.w(ShootingIntentService.this.getClass().getName(), "shooting with shutter speed " + shutSpeedValue);
+
+                                    Intent localIntent = new Intent(BROADCAST_ACTION).putExtra(EXTENDED_DATA_STATUS, shutSpeedValue);
+                                    LocalBroadcastManager.getInstance(ShootingIntentService.this).sendBroadcast(localIntent);
+
                                     final Handler handler = new Handler();
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
                                             if (!shutSpeedValue.equals(shutSpeedSet[shutSpeedSet.length - 1])) {
                                                 nextCommandCallback.apply(arg);
+                                            } else {
+                                                // release locks
+                                                wifiLock.release();
+                                                wakeLock.release();
                                             }
                                         }
-                                    }, 5000);
+                                    }, calculateDelay(shutSpeedValue));
                                 }
                             }, failureCallback);
                 }
@@ -136,6 +161,12 @@ public class ShootingIntentService extends IntentService {
 
         CommandChain chain = builder.build();
         chain.run(this);
+    }
+
+    private int calculateDelay(String shutSpeedValue) {
+        int delay = 5000 + (shutSpeedValue.contains("\"")
+                ? (1000 * Integer.valueOf(shutSpeedValue.trim().replace("\"", ""))) : 100);
+        return delay;
     }
 
     private void shoot(final long currentFrame, final long frameCount, final long msInterval) {
@@ -156,6 +187,10 @@ public class ShootingIntentService extends IntentService {
                                                     shoot(currentFrame + 1, frameCount, msInterval);
                                                 }
                                             }, msInterval);
+                                        } else {
+                                            // release locks
+                                            wifiLock.release();
+                                            wakeLock.release();
                                         }
                                     }
                                 },

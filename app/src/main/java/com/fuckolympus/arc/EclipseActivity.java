@@ -104,7 +104,11 @@ public class EclipseActivity extends SessionAwareActivity {
     }
 
     private void calculateFramesNumberForTotality() {
+        Settings settings = session.getSettings();
 
+        String[] selectedShutSpeeds = StringUtils.split(settings.getByKey(R.string.totality_shut_speed_set), ',');
+        TextView framesNumberText = (TextView) findViewById(R.id.framesNumberText);
+        framesNumberText.setText(String.valueOf(selectedShutSpeeds.length));
     }
 
     private void calculateFramesNumberForTimeLapse() {
@@ -135,10 +139,6 @@ public class EclipseActivity extends SessionAwareActivity {
         eShutSpeedText.setText(totalityFlag
                 ? settings.getByKey(R.string.totality_shut_speed_set)
                 : settings.getByKey(R.string.partial_phase_shut_speed));
-
-        String[] selectedShutSpeeds = StringUtils.split(settings.getByKey(R.string.totality_shut_speed_set), ',');
-        TextView framesNumberText = (TextView) findViewById(R.id.framesNumberText);
-        framesNumberText.setText(String.valueOf(selectedShutSpeeds.length));
     }
 
     private void startPartialPhaseTimeLapse() {

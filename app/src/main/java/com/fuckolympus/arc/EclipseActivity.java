@@ -16,10 +16,9 @@ import com.fuckolympus.arc.util.Callback;
 import com.fuckolympus.arc.util.StubCallback;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class EclipseActivity extends SessionAwareActivity {
+
+    public static final String FOCAL_FORMAT = "F%s";
 
     private boolean totalityFlag = false;
 
@@ -54,7 +53,7 @@ public class EclipseActivity extends SessionAwareActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(EclipseActivity.this);
                 AlertDialog alertDialog = builder.setTitle(totalityFlag ? R.string.total_phase_label : R.string.part_phase_label)
-                        .setMessage(R.string.confirm_start_process)
+                        .setMessage(totalityFlag ? R.string.confirm_totality_shooting : R.string.confirm_partial_phase_shooting)
                         .setPositiveButton(R.string.yes_btn, clickListener)
                         .setNegativeButton(R.string.no_btn, clickListener)
                         .create();
@@ -64,26 +63,13 @@ public class EclipseActivity extends SessionAwareActivity {
     }
 
     private void startTotality() {
-        String minShutSpeedValue = session.getSettings().getByKey(R.string.totality_min_shut_speed);
-        String maxShutSpeedValue = session.getSettings().getByKey(R.string.totality_max_shut_speed);
-        String[] shutSpeedValues = session.getCameraState().getShutterSpeedValueEnum();
-        List<String> shutSpeedSet = new ArrayList<>();
-        boolean foundMin = false;
-        for (String shutSpeedValue : shutSpeedValues) {
-            if (shutSpeedValue.equals(minShutSpeedValue)) {
-                foundMin = true;
-            }
-            if (shutSpeedValue.equals(maxShutSpeedValue)) {
-                shutSpeedSet.add(shutSpeedValue);
-                foundMin = false;
-            }
-            if (foundMin) {
-                shutSpeedSet.add(shutSpeedValue);
-            }
+        String[] selectedShutSpeeds = StringUtils.split(session.getSettings().getByKey(R.string.totality_shut_speed_set), ',');
+        if (selectedShutSpeeds == null || selectedShutSpeeds.length == 0) {
+            return;
         }
 
         TextView framesNumberText = (TextView) findViewById(R.id.framesNumberText);
-        framesNumberText.setText(String.valueOf(shutSpeedSet.size()));
+        framesNumberText.setText(String.valueOf(selectedShutSpeeds.length));
 
         final String focalValue = session.getSettings().getByKey(R.string.totality_focal_value);
 
@@ -103,7 +89,7 @@ public class EclipseActivity extends SessionAwareActivity {
 
         commandChain.run(this);
 
-        ShootingIntentService.startActionTotalityPhase(EclipseActivity.this, shutSpeedSet.toArray(new String[shutSpeedSet.size()]));
+        ShootingIntentService.startActionTotalityPhase(EclipseActivity.this, selectedShutSpeeds);
     }
 
     @Override
@@ -142,13 +128,17 @@ public class EclipseActivity extends SessionAwareActivity {
 
         TextView eFocalValueText = (TextView) findViewById(R.id.eFocalValueText);
         eFocalValueText.setText(totalityFlag
-                ? String.format("F%s", settings.getByKey(R.string.totality_focal_value))
-                : String.format("F%s", settings.getByKey(R.string.partial_phase_focal_value)));
+                ? String.format(FOCAL_FORMAT, settings.getByKey(R.string.totality_focal_value))
+                : String.format(FOCAL_FORMAT, settings.getByKey(R.string.partial_phase_focal_value)));
 
         TextView eShutSpeedText = (TextView) findViewById(R.id.eShutSpeedText);
         eShutSpeedText.setText(totalityFlag
-                ? String.format("%s - %s", settings.getByKey(R.string.totality_min_shut_speed), settings.getByKey(R.string.totality_max_shut_speed))
+                ? settings.getByKey(R.string.totality_shut_speed_set)
                 : settings.getByKey(R.string.partial_phase_shut_speed));
+
+        String[] selectedShutSpeeds = StringUtils.split(settings.getByKey(R.string.totality_shut_speed_set), ',');
+        TextView framesNumberText = (TextView) findViewById(R.id.framesNumberText);
+        framesNumberText.setText(String.valueOf(selectedShutSpeeds.length));
     }
 
     private void startPartialPhaseTimeLapse() {
@@ -160,7 +150,6 @@ public class EclipseActivity extends SessionAwareActivity {
                 settings.getByKey(R.string.time_lapse_interval));
         final long timeLapseIntervalInSeconds = (Integer.valueOf(timeLapseIntArr[1]) * 60) + Integer.valueOf(timeLapseIntArr[2]);
 
-        final String cameraMode = settings.getByKey(R.string.partial_phase_take_mode);
         final String focalValue = settings.getByKey(R.string.partial_phase_focal_value);
         final String shutSpeedValue = settings.getByKey(R.string.partial_phase_shut_speed);
 

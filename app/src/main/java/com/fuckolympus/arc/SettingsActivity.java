@@ -16,7 +16,10 @@ import com.fuckolympus.arc.settings.Settings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 public class SettingsActivity extends SessionAwareActivity {
 
@@ -55,9 +58,60 @@ public class SettingsActivity extends SessionAwareActivity {
             }
         });
 
-        configureSpinner(R.id.totalityMinShutSpeedSpinner, cameraState.getShutterSpeedValueEnum(), R.string.totality_min_shut_speed);
-        configureSpinner(R.id.totalityMaxShutSpeedSpinner, cameraState.getShutterSpeedValueEnum(), R.string.totality_max_shut_speed);
         configureSpinner(R.id.totalityFocalValueSpinner, cameraState.getFocalValueEnum(), R.string.totality_focal_value);
+
+        TextView totalityShutSpeedText = (TextView) findViewById(R.id.totalityShutSpeedText);
+        totalityShutSpeedText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMultiSelectDialog();
+            }
+        });
+    }
+
+    private void showMultiSelectDialog() {
+        final Settings settings = session.getSettings();
+        String[] shutSpeeds = StringUtils.split(settings.getByKey(R.string.totality_shut_speed_set), ',');
+        if (shutSpeeds == null) {
+            shutSpeeds = new String[0];
+        }
+
+        final Set<String> shutSpeedsSet = new HashSet<>(Arrays.asList(shutSpeeds));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+        final String[] shutterSpeedValueEnum = session.getCameraState().getShutterSpeedValueEnum();
+        builder.setMultiChoiceItems(shutterSpeedValueEnum, new boolean[shutterSpeedValueEnum.length],
+                new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        if (isChecked) {
+                            shutSpeedsSet.add(shutterSpeedValueEnum[which]);
+                        } else {
+                            shutSpeedsSet.remove(shutterSpeedValueEnum[which]);
+                        }
+                    }
+                });
+
+        DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        String value = StringUtils.join(shutSpeedsSet, ",");
+                        settings.updateByKey(R.string.totality_shut_speed_set, value);
+                        TextView totalityShutSpeedText = (TextView) findViewById(R.id.totalityShutSpeedText);
+                        totalityShutSpeedText.setText(value);
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+                dialog.dismiss();
+            }
+        };
+
+        AlertDialog dialog = builder.setPositiveButton(R.string.ok_btn, onClickListener)
+                .setNegativeButton(R.string.cancel_btn, onClickListener).create();
+        dialog.show();
     }
 
     private void configureSpinner(int spinnerId, String[] values, final int preferenceKey) {
@@ -101,8 +155,9 @@ public class SettingsActivity extends SessionAwareActivity {
         timeLapseIntervalText.setText(settings.getByKey(R.string.time_lapse_interval));
 
         setSpinnerSelection(R.id.totalityFocalValueSpinner, settings.getByKey(R.string.totality_focal_value));
-        setSpinnerSelection(R.id.totalityMinShutSpeedSpinner, settings.getByKey(R.string.totality_min_shut_speed));
-        setSpinnerSelection(R.id.totalityMaxShutSpeedSpinner, settings.getByKey(R.string.totality_max_shut_speed));
+
+        TextView totalityShutSpeedText = (TextView) findViewById(R.id.totalityShutSpeedText);
+        totalityShutSpeedText.setText(settings.getByKey(R.string.totality_shut_speed_set));
     }
 
     private void setSpinnerSelection(int spinnerId, String selectedValue) {

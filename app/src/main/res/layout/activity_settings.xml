@@ -111,14 +111,11 @@
                         android:text="@string/shut_speed_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" android:id="@+id/totalityShutSpeedLabel" android:layout_weight="1"/>
-                <Spinner
+                <TextView
+                        android:text="@string/default_prop_text"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/totalityMinShutSpeedSpinner" android:layout_weight="1"/>
-                <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/totalityMaxShutSpeedSpinner" android:layout_weight="1"/>
+                        android:textAlignment="center"
+                        android:layout_height="wrap_content" android:id="@+id/totalityShutSpeedText" android:layout_weight="1"/>
             </LinearLayout>
             <LinearLayout
                     android:orientation="horizontal"

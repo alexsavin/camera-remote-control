@@ -31,7 +31,8 @@
     <string name="ok_btn">OK</string>
     <string name="cancel_btn">Cancel</string>
     <string name="start_process_btn">START !!!</string>
-    <string name="confirm_start_process">Do you want start shooting?</string>
+    <string name="confirm_partial_phase_shooting">Put sun filter on lens! Press YES to start shooting.</string>
+    <string name="confirm_totality_shooting">Don\'t forget to remove sun filter! Press YES to start shooting.</string>
     <string name="frames_number_label">Frames number</string>
     <!-- settings activity -->
     <string name="totality_time_label">Totality time</string>
@@ -48,14 +49,11 @@
     <string name="preference_file_name">com.fuckolympus.arc.config</string>
     <string name="totality_time">totality.time</string>
     <string name="totality_duration">totality.duration</string>
-    <string name="partial_phase_take_mode">partial.phase.take.mode</string>
     <string name="partial_phase_shut_speed">partial.phase.shut.speed</string>
     <string name="partial_phase_focal_value">partial.phase.focal.value</string>
     <string name="time_lapse_interval">time.lapse.interval</string>
-    <string name="totality_take_mode">totality.take.mode</string>
     <string name="totality_focal_value">totality.phase.focal.value</string>
-    <string name="totality_min_shut_speed">totality.phase.min.shut.speed</string>
-    <string name="totality_max_shut_speed">totality.phase.max.shut.speed</string>
+    <string name="totality_shut_speed_set">totality.phase.shut.speed.set</string>
 
     <string name="totality_flag">totality.flag</string>
 </resources>

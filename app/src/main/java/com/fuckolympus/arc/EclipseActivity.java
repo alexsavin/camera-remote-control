@@ -1,8 +1,13 @@
 package com.fuckolympus.arc;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,6 +31,10 @@ public class EclipseActivity extends SessionAwareActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_eclipse);
+
+        IntentFilter intentFilter = new IntentFilter(ShootingIntentService.BROADCAST_ACTION);
+        ShootingStateReceiver shootingStateReceiver = new ShootingStateReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(shootingStateReceiver, intentFilter);
 
         Bundle bundle = getIntent().getExtras();
         if (null != bundle) {
@@ -82,7 +91,7 @@ public class EclipseActivity extends SessionAwareActivity {
                 }).addCommand(new Command<String>() {
                     @Override
                     public void apply(final Callback<String> nextCommandCallback, final Callback<String> failureCallback) {
-                        session.getCameraApi().setCameraProp(EclipseActivity.this, CameraApi.FOCALVALUE_PROP, focalValue,
+                        session.getCameraApi().setCameraProp(EclipseActivity.this, CameraApi.FOCALVALUE_PROP, focalValue.trim(),
                                 new StubCallback<String>(), failureCallback);
                     }
                 }).build();
@@ -163,7 +172,7 @@ public class EclipseActivity extends SessionAwareActivity {
                 .addCommand(new Command<String>() {
                     @Override
                     public void apply(final Callback<String> nextCommandCallback, final Callback<String> failureCallback) {
-                        session.getCameraApi().setCameraProp(EclipseActivity.this, CameraApi.FOCALVALUE_PROP, focalValue,
+                        session.getCameraApi().setCameraProp(EclipseActivity.this, CameraApi.FOCALVALUE_PROP, focalValue.trim(),
                                 nextCommandCallback, failureCallback);
                     }
                 })
@@ -183,7 +192,7 @@ public class EclipseActivity extends SessionAwareActivity {
                 .addCommand(new Command<String>() {
                     @Override
                     public void apply(final Callback<String> nextCommandCallback, final Callback<String> failureCallback) {
-                        session.getCameraApi().setCameraProp(EclipseActivity.this, CameraApi.SHUTSPEEDVALUE_PROP, shutSpeedValue,
+                        session.getCameraApi().setCameraProp(EclipseActivity.this, CameraApi.SHUTSPEEDVALUE_PROP, shutSpeedValue.trim(),
                                 nextCommandCallback, failureCallback);
                     }
                 })
@@ -216,5 +225,19 @@ public class EclipseActivity extends SessionAwareActivity {
                 .build();
 
         commandChain.run(this);
+    }
+
+    private class ShootingStateReceiver extends BroadcastReceiver {
+
+        private ShootingStateReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String currNumber = bundle.getString(ShootingIntentService.EXTENDED_DATA_STATUS);
+            TextView currentFrameNumberText = (TextView) findViewById(R.id.currentFrameNumberText);
+            currentFrameNumberText.setText(currNumber);
+        }
     }
 }

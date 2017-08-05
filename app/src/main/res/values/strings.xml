@@ -34,6 +34,8 @@
     <string name="confirm_partial_phase_shooting">Put sun filter on lens! Press YES to start shooting.</string>
     <string name="confirm_totality_shooting">Don\'t forget to remove sun filter! Press YES to start shooting.</string>
     <string name="frames_number_label">Frames number</string>
+    <string name="eclipse_warning">Set ISO = 200 \ndrivemode = Single frame.\nPut filter on lens before shooting partial phase.\nRemove filter during totality.</string>
+    <string name="current_frame_number_label">Current frame:</string>
     <!-- settings activity -->
     <string name="totality_time_label">Totality time</string>
     <string name="totality_duration_label">Totality duration</string>

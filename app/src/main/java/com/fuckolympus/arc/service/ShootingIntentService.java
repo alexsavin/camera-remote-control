@@ -114,7 +114,7 @@ public class ShootingIntentService extends IntentService {
             }).addCommand(new Command<String>() {
                 @Override
                 public void apply(Callback<String> nextCommandCallback, Callback<String> failureCallback) {
-                    session.getCameraApi().setCameraProp(ShootingIntentService.this, CameraApi.SHUTSPEEDVALUE_PROP, shutSpeedValue,
+                    session.getCameraApi().setCameraProp(ShootingIntentService.this, CameraApi.SHUTSPEEDVALUE_PROP, shutSpeedValue.trim(),
                             nextCommandCallback, failureCallback);
                 }
             }).addCommand(new Command<String>() {
@@ -164,9 +164,7 @@ public class ShootingIntentService extends IntentService {
     }
 
     private int calculateDelay(String shutSpeedValue) {
-        int delay = 5000 + (shutSpeedValue.contains("\"")
-                ? (1000 * Integer.valueOf(shutSpeedValue.trim().replace("\"", ""))) : 100);
-        return delay;
+        return 5000 + (shutSpeedValue.contains("\"") ? (1000 * Integer.valueOf(shutSpeedValue.trim().replace("\"", ""))) : 100);
     }
 
     private void shoot(final long currentFrame, final long frameCount, final long msInterval) {
@@ -179,6 +177,10 @@ public class ShootingIntentService extends IntentService {
                                     @Override
                                     public void apply(final String arg) {
                                         Log.w(ShootingIntentService.this.getClass().getName(), "current frame " + currentFrame);
+
+                                        Intent localIntent = new Intent(BROADCAST_ACTION).putExtra(EXTENDED_DATA_STATUS, String.valueOf(currentFrame));
+                                        LocalBroadcastManager.getInstance(ShootingIntentService.this).sendBroadcast(localIntent);
+
                                         if (currentFrame < frameCount) {
                                             final Handler handler = new Handler();
                                             handler.postDelayed(new Runnable() {

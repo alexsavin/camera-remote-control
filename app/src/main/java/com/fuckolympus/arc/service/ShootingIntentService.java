@@ -25,7 +25,8 @@ import com.fuckolympus.arc.util.DefaultFailureCallback;
  */
 public class ShootingIntentService extends IntentService {
 
-    public static final String BROADCAST_ACTION = "com.fuckolympis.arc.BROADCAST";
+    public static final String FRAME_TAKEN_ACTION = "com.fuckolympis.arc.FRAME_TAKEN_ACTION";
+    public static final String SHOOTING_COMPLETE_ACTION = "com.fuckolympis.arc.SHOOTING_COMPLETE_ACTION";
     public static final String EXTENDED_DATA_STATUS = "com.fuckolympis.arc.STATUS";
 
     private static final String ACTION_PARTIAL_PHASE = "com.fuckolympus.arc.service.action.PARTIAL_PHASE";
@@ -137,7 +138,7 @@ public class ShootingIntentService extends IntentService {
                                 public void apply(final String arg) {
                                     Log.w(ShootingIntentService.this.getClass().getName(), "shooting with shutter speed " + shutSpeedValue);
 
-                                    Intent localIntent = new Intent(BROADCAST_ACTION).putExtra(EXTENDED_DATA_STATUS, shutSpeedValue);
+                                    Intent localIntent = new Intent(FRAME_TAKEN_ACTION).putExtra(EXTENDED_DATA_STATUS, shutSpeedValue);
                                     LocalBroadcastManager.getInstance(ShootingIntentService.this).sendBroadcast(localIntent);
 
                                     final Handler handler = new Handler();
@@ -147,6 +148,9 @@ public class ShootingIntentService extends IntentService {
                                             if (!shutSpeedValue.equals(shutSpeedSet[shutSpeedSet.length - 1])) {
                                                 nextCommandCallback.apply(arg);
                                             } else {
+                                                Intent completeIntent = new Intent(SHOOTING_COMPLETE_ACTION);
+                                                LocalBroadcastManager.getInstance(ShootingIntentService.this).sendBroadcast(completeIntent);
+
                                                 // release locks
                                                 wifiLock.release();
                                                 wakeLock.release();
@@ -178,7 +182,7 @@ public class ShootingIntentService extends IntentService {
                                     public void apply(final String arg) {
                                         Log.w(ShootingIntentService.this.getClass().getName(), "current frame " + currentFrame);
 
-                                        Intent localIntent = new Intent(BROADCAST_ACTION).putExtra(EXTENDED_DATA_STATUS, String.valueOf(currentFrame));
+                                        Intent localIntent = new Intent(FRAME_TAKEN_ACTION).putExtra(EXTENDED_DATA_STATUS, String.valueOf(currentFrame));
                                         LocalBroadcastManager.getInstance(ShootingIntentService.this).sendBroadcast(localIntent);
 
                                         if (currentFrame < frameCount) {
@@ -190,6 +194,9 @@ public class ShootingIntentService extends IntentService {
                                                 }
                                             }, msInterval);
                                         } else {
+                                            Intent completeIntent = new Intent(SHOOTING_COMPLETE_ACTION);
+                                            LocalBroadcastManager.getInstance(ShootingIntentService.this).sendBroadcast(completeIntent);
+
                                             // release locks
                                             wifiLock.release();
                                             wakeLock.release();

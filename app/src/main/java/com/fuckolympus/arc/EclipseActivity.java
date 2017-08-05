@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
@@ -32,9 +33,12 @@ public class EclipseActivity extends SessionAwareActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_eclipse);
 
-        IntentFilter intentFilter = new IntentFilter(ShootingIntentService.BROADCAST_ACTION);
+        IntentFilter intentFilter = new IntentFilter(ShootingIntentService.FRAME_TAKEN_ACTION);
+        IntentFilter completeFilter = new IntentFilter(ShootingIntentService.SHOOTING_COMPLETE_ACTION);
         ShootingStateReceiver shootingStateReceiver = new ShootingStateReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(shootingStateReceiver, intentFilter);
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        localBroadcastManager.registerReceiver(shootingStateReceiver, intentFilter);
+        localBroadcastManager.registerReceiver(shootingStateReceiver, completeFilter);
 
         Bundle bundle = getIntent().getExtras();
         if (null != bundle) {
@@ -235,9 +239,15 @@ public class EclipseActivity extends SessionAwareActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
-            String currNumber = bundle.getString(ShootingIntentService.EXTENDED_DATA_STATUS);
-            TextView currentFrameNumberText = (TextView) findViewById(R.id.currentFrameNumberText);
-            currentFrameNumberText.setText(currNumber);
+            if (ShootingIntentService.FRAME_TAKEN_ACTION.equals(intent.getAction())) {
+                String currNumber = bundle.getString(ShootingIntentService.EXTENDED_DATA_STATUS);
+                TextView currentFrameNumberText = (TextView) findViewById(R.id.currentFrameNumberText);
+                currentFrameNumberText.setText(currNumber);
+            } else if (ShootingIntentService.SHOOTING_COMPLETE_ACTION.equals(intent.getAction())) {
+                TextView currentFrameNumberText = (TextView) findViewById(R.id.currentFrameNumberText);
+                currentFrameNumberText.setText(R.string.shooting_complete_msg);
+                currentFrameNumberText.setTextColor(Color.parseColor(getString(R.color.colorAccent)));
+            }
         }
     }
 }

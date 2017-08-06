@@ -1,6 +1,5 @@
 package com.fuckolympus.arc.util;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 import com.android.volley.AuthFailureError;
@@ -11,7 +10,6 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import java.nio.charset.Charset;
 
@@ -26,10 +24,9 @@ public final class HttpUtil {
     private HttpUtil() {
     }
 
-    public static void makeGetRequest(Context context, String url,
+    public static void makeGetRequest(RequestQueue queue, String url,
                                       final SuccessResponseHandler successHandler,
                                       final ErrorResponseHandler errorHandler) {
-        RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -47,10 +44,9 @@ public final class HttpUtil {
         queue.add(request);
     }
 
-    public static void makePostRequest(Context context, String url, final String body,
+    public static void makePostRequest(RequestQueue queue, String url, final String body,
                                        final SuccessResponseHandler successHandler,
                                        final ErrorResponseHandler errorHandler) {
-        RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -74,11 +70,10 @@ public final class HttpUtil {
         queue.add(request);
     }
 
-    public static void loadImageRequest(Context context, String url,
+    public static void loadImageRequest(RequestQueue queue, String url,
                                         int width, int height,
                                         final SuccessImageResponseHandler successHandler,
                                         final ErrorResponseHandler errorHandler) {
-        RequestQueue queue = Volley.newRequestQueue(context);
         ImageRequest request = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override

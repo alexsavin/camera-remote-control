@@ -1,5 +1,6 @@
 package com.fuckolympus.arc.session;
 
+import android.content.Context;
 import com.fuckolympus.arc.camera.api.CameraApi;
 import com.fuckolympus.arc.camera.api.CameraState;
 import com.fuckolympus.arc.settings.Settings;
@@ -9,15 +10,15 @@ import com.fuckolympus.arc.settings.Settings;
  */
 public final class Session {
 
-    private Session() {
-        cameraApi = new CameraApi();
+    private Session(Context context) {
+        cameraApi = new CameraApi(context);
     }
 
     private static Session instance;
 
-    public static Session getInstance() {
+    public static Session getInstance(Context context) {
         if (instance == null) {
-            instance = new Session();
+            instance = new Session(context);
         }
         return instance;
     }

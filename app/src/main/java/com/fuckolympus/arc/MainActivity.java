@@ -45,7 +45,7 @@ public class MainActivity extends SessionAwareActivity {
         updateUI(WAITING_FLAG, "");
 
         session.getCameraApi().getCameraInfo(
-                this, new Callback<Caminfo>() {
+                new Callback<Caminfo>() {
                     @Override
                     public void apply(Caminfo arg) {
                         updateUI(SUCCSESS_FLAG, arg.model);
@@ -55,7 +55,7 @@ public class MainActivity extends SessionAwareActivity {
     }
 
     private void switchToRecMode() {
-        session.getCameraApi().switchToRecMode(this, new Callback<String>() {
+        session.getCameraApi().switchToRecMode(new Callback<String>() {
             @Override
             public void apply(String arg) {
                 getCameraProps();
@@ -64,7 +64,7 @@ public class MainActivity extends SessionAwareActivity {
     }
 
     private void getCameraProps() {
-        session.getCameraApi().getCameraProps(this, new Callback<Desclist>() {
+        session.getCameraApi().getCameraProps(new Callback<Desclist>() {
             @Override
             public void apply(Desclist arg) {
                 CameraState cameraState = new CameraState.CameraStateBuilder().setDesclist(arg).build();

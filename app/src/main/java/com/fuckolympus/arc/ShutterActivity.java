@@ -83,7 +83,7 @@ public class ShutterActivity extends SessionAwareActivity {
     }
 
     private void switchToShutterMode() {
-        session.getCameraApi().switchToShutterMode(this, new Callback<String>() {
+        session.getCameraApi().switchToShutterMode(new Callback<String>() {
             @Override
             public void apply(String arg) {
                 ImageButton shutterButton = (ImageButton) findViewById(R.id.shutterButton);
@@ -94,19 +94,19 @@ public class ShutterActivity extends SessionAwareActivity {
 
     private void execShutter() {
         Log.w(this.getClass().getName(), "shutter");
-        session.getCameraApi().executeShutter(this, ShutterMode.SND_PUSH, shutterCallback, failureCallback);
+        session.getCameraApi().executeShutter(ShutterMode.SND_PUSH, shutterCallback, failureCallback);
     }
 
     private void firstRelease() {
         Log.w(this.getClass().getName(), "release");
-        session.getCameraApi().executeShutter(this, ShutterMode.FST_RELEASE, successCallback, failureCallback);
+        session.getCameraApi().executeShutter(ShutterMode.FST_RELEASE, successCallback, failureCallback);
         buttonPressed = false;
     }
 
     private void firstPush() {
         Log.w(this.getClass().getName(), "push");
         buttonPressed = true;
-        session.getCameraApi().executeShutter(this, ShutterMode.FST_PUSH, successCallback, failureCallback);
+        session.getCameraApi().executeShutter(ShutterMode.FST_PUSH, successCallback, failureCallback);
     }
 
     private class ShutterCallback implements Callback<String> {

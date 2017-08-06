@@ -43,7 +43,12 @@ public class ShootingIntentService extends IntentService {
 
     public ShootingIntentService() {
         super("ShootingIntentService");
-        session = Session.getInstance();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        session = Session.getInstance(this.getApplicationContext());
     }
 
     /**
@@ -110,29 +115,29 @@ public class ShootingIntentService extends IntentService {
             builder.addCommand(new Command<String>() {
                 @Override
                 public void apply(Callback<String> nextCommandCallback, Callback<String> failureCallback) {
-                    session.getCameraApi().switchToRecMode(ShootingIntentService.this, nextCommandCallback, failureCallback);
+                    session.getCameraApi().switchToRecMode(nextCommandCallback, failureCallback);
                 }
             }).addCommand(new Command<String>() {
                 @Override
                 public void apply(Callback<String> nextCommandCallback, Callback<String> failureCallback) {
-                    session.getCameraApi().setCameraProp(ShootingIntentService.this, CameraApi.SHUTSPEEDVALUE_PROP, shutSpeedValue.trim(),
+                    session.getCameraApi().setCameraProp(CameraApi.SHUTSPEEDVALUE_PROP, shutSpeedValue.trim(),
                             nextCommandCallback, failureCallback);
                 }
             }).addCommand(new Command<String>() {
                 @Override
                 public void apply(Callback<String> nextCommandCallback, Callback<String> failureCallback) {
-                    session.getCameraApi().switchToShutterMode(ShootingIntentService.this, nextCommandCallback, failureCallback);
+                    session.getCameraApi().switchToShutterMode(nextCommandCallback, failureCallback);
                 }
             }).addCommand(new Command<String>() {
                 @Override
                 public void apply(Callback<String> nextCommandCallback, Callback<String> failureCallback) {
-                    session.getCameraApi().executeShutter(ShootingIntentService.this, ShutterMode.FST_SND_PUSH,
+                    session.getCameraApi().executeShutter(ShutterMode.FST_SND_PUSH,
                             nextCommandCallback, failureCallback);
                 }
             }).addCommand(new Command<String>() {
                 @Override
                 public void apply(final Callback<String> nextCommandCallback, Callback<String> failureCallback) {
-                    session.getCameraApi().executeShutter(ShootingIntentService.this, ShutterMode.SND_FST_RELEASE,
+                    session.getCameraApi().executeShutter(ShutterMode.SND_FST_RELEASE,
                             new Callback<String>() {
                                 @Override
                                 public void apply(final String arg) {
@@ -172,11 +177,11 @@ public class ShootingIntentService extends IntentService {
     }
 
     private void shoot(final long currentFrame, final long frameCount, final long msInterval) {
-        session.getCameraApi().executeShutter(ShootingIntentService.this, ShutterMode.FST_SND_PUSH,
+        session.getCameraApi().executeShutter(ShutterMode.FST_SND_PUSH,
                 new Callback<String>() {
                     @Override
                     public void apply(String arg) {
-                        session.getCameraApi().executeShutter(ShootingIntentService.this, ShutterMode.SND_FST_RELEASE,
+                        session.getCameraApi().executeShutter(ShutterMode.SND_FST_RELEASE,
                                 new Callback<String>() {
                                     @Override
                                     public void apply(final String arg) {

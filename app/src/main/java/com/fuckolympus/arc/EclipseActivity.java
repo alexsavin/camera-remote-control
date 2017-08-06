@@ -90,12 +90,12 @@ public class EclipseActivity extends SessionAwareActivity {
                 .addCommand(new Command<String>() {
                     @Override
                     public void apply(Callback<String> nextCommandCallback, Callback<String> failureCallback) {
-                        session.getCameraApi().switchToRecMode(EclipseActivity.this, nextCommandCallback, failureCallback);
+                        session.getCameraApi().switchToRecMode(nextCommandCallback, failureCallback);
                     }
                 }).addCommand(new Command<String>() {
                     @Override
                     public void apply(final Callback<String> nextCommandCallback, final Callback<String> failureCallback) {
-                        session.getCameraApi().setCameraProp(EclipseActivity.this, CameraApi.FOCALVALUE_PROP, focalValue.trim(),
+                        session.getCameraApi().setCameraProp(CameraApi.FOCALVALUE_PROP, focalValue.trim(),
                                 new StubCallback<String>(), failureCallback);
                     }
                 }).build();
@@ -170,20 +170,20 @@ public class EclipseActivity extends SessionAwareActivity {
                 .addCommand(new Command<String>() {
                     @Override
                     public void apply(Callback<String> nextCommandCallback, Callback<String> failureCallback) {
-                        session.getCameraApi().switchToRecMode(EclipseActivity.this, nextCommandCallback, failureCallback);
+                        session.getCameraApi().switchToRecMode(nextCommandCallback, failureCallback);
                     }
                 })
                 .addCommand(new Command<String>() {
                     @Override
                     public void apply(final Callback<String> nextCommandCallback, final Callback<String> failureCallback) {
-                        session.getCameraApi().setCameraProp(EclipseActivity.this, CameraApi.FOCALVALUE_PROP, focalValue.trim(),
+                        session.getCameraApi().setCameraProp(CameraApi.FOCALVALUE_PROP, focalValue.trim(),
                                 nextCommandCallback, failureCallback);
                     }
                 })
                 .addCommand(new Command<String>() {
                     @Override
                     public void apply(final Callback<String> nextCommandCallback, final Callback<String> failureCallback) {
-                        session.getCameraApi().getCameraProp(EclipseActivity.this,
+                        session.getCameraApi().getCameraProp(
                                 CameraApi.FOCALVALUE_PROP, new Callback<String>() {
                                     @Override
                                     public void apply(String arg) {
@@ -196,14 +196,14 @@ public class EclipseActivity extends SessionAwareActivity {
                 .addCommand(new Command<String>() {
                     @Override
                     public void apply(final Callback<String> nextCommandCallback, final Callback<String> failureCallback) {
-                        session.getCameraApi().setCameraProp(EclipseActivity.this, CameraApi.SHUTSPEEDVALUE_PROP, shutSpeedValue.trim(),
+                        session.getCameraApi().setCameraProp(CameraApi.SHUTSPEEDVALUE_PROP, shutSpeedValue.trim(),
                                 nextCommandCallback, failureCallback);
                     }
                 })
                 .addCommand(new Command<String>() {
                     @Override
                     public void apply(final Callback<String> nextCommandCallback, final Callback<String> failureCallback) {
-                        session.getCameraApi().getCameraProp(EclipseActivity.this,
+                        session.getCameraApi().getCameraProp(
                                 CameraApi.SHUTSPEEDVALUE_PROP, new Callback<String>() {
                                     @Override
                                     public void apply(String arg) {
@@ -216,7 +216,7 @@ public class EclipseActivity extends SessionAwareActivity {
                 .addCommand(new Command<String>() {
                     @Override
                     public void apply(Callback<String> nextCommandCallback, Callback<String> failureCallback) {
-                        session.getCameraApi().switchToShutterMode(EclipseActivity.this,
+                        session.getCameraApi().switchToShutterMode(
                                 new Callback<String>() {
                                     @Override
                                     public void apply(String arg) {

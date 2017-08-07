@@ -27,8 +27,7 @@ import java.util.List;
  */
 public class CameraApi {
 
-    //public static final String CAMERA_URL = "http://192.168.0.10";
-    public static final String CAMERA_URL = "http://alexandersavin.me";
+    public static final String CAMERA_URL = "http://192.168.0.10";
 
     public static final String GET_CAMINFO = "/get_caminfo.cgi";
 

@@ -7,6 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
@@ -247,6 +250,10 @@ public class EclipseActivity extends SessionAwareActivity {
                 TextView currentFrameNumberText = (TextView) findViewById(R.id.currentFrameNumberText);
                 currentFrameNumberText.setText(R.string.shooting_complete_msg);
                 currentFrameNumberText.setTextColor(Color.parseColor(getString(R.color.colorAccent)));
+
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                r.play();
             }
         }
     }

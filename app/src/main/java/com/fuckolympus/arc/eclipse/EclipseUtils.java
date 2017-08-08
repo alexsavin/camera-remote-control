@@ -26,7 +26,7 @@ public final class EclipseUtils {
                 Integer.valueOf(totalityTimeArr[0]), Integer.valueOf(totalityTimeArr[1]), Integer.valueOf(totalityTimeArr[2]));
         Date totalityDate = calendar.getTime();
 
-        long secondsInterval = (totalityDate.getTime() - currentDate.getTime()) / 1000;
+        long secondsInterval = (totalityDate.getTime() - currentDate.getTime() - 60000) / 1000;
 
         String[] timeLapseIntArr = StringUtils.split(timeLapseInterval, SEPARATOR_CHAR);
 

@@ -16,6 +16,8 @@ import com.fuckolympus.arc.session.Session;
 import com.fuckolympus.arc.util.Callback;
 import com.fuckolympus.arc.util.DefaultFailureCallback;
 
+import java.util.Calendar;
+
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
@@ -34,6 +36,7 @@ public class ShootingIntentService extends IntentService {
 
     private static final String FRAMES_COUNT = "com.fuckolympus.arc.service.extra.FRAMES_COUNT";
     private static final String MS_INTERVAL = "com.fuckolympus.arc.service.extra.MS_INTERVAL";
+    private static final String TOTALITY_TIME = "com.fuckolympus.arc.service.extra.TOTALITY_TIME";
     private static final String SHUT_SPEED_SET = "com.fuckolympus.arc.service.extra.SHUT_SPEED_SET";
 
     private Session session;
@@ -57,11 +60,12 @@ public class ShootingIntentService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startActionPartialPhase(Context context, long framesNumber, long msInterval) {
+    public static void startActionPartialPhase(Context context, long framesNumber, long msInterval, long totalityTime) {
         Intent intent = new Intent(context, ShootingIntentService.class);
         intent.setAction(ACTION_PARTIAL_PHASE);
         intent.putExtra(FRAMES_COUNT, framesNumber);
         intent.putExtra(MS_INTERVAL, msInterval);
+        intent.putExtra(TOTALITY_TIME, totalityTime);
         context.startService(intent);
     }
 
@@ -94,7 +98,8 @@ public class ShootingIntentService extends IntentService {
             if (ACTION_PARTIAL_PHASE.equals(action)) {
                 final long framesCount = intent.getLongExtra(FRAMES_COUNT, 0L);
                 final long msInterval = intent.getLongExtra(MS_INTERVAL, 30000L);
-                handleActionPartialPhase(framesCount, msInterval);
+                final long totalityTime = intent.getLongExtra(TOTALITY_TIME, Long.MAX_VALUE);
+                handleActionPartialPhase(framesCount, msInterval, totalityTime);
             } else if (ACTION_TOTALITY_PHASE.equals(action)) {
                 final String[] shutSpeedSet = intent.getStringArrayExtra(SHUT_SPEED_SET);
                 handleActionTotalityPhase(shutSpeedSet);
@@ -102,9 +107,9 @@ public class ShootingIntentService extends IntentService {
         }
     }
 
-    private void handleActionPartialPhase(final long framesCount, final long msInterval) {
+    private void handleActionPartialPhase(final long framesCount, final long msInterval, long totalityTime) {
         Log.w(this.getClass().getName(), "start partial phase. Frames count: " + framesCount);
-        shoot(1L, framesCount, msInterval);
+        shoot(1L, framesCount, msInterval, totalityTime);
     }
 
     private void handleActionTotalityPhase(final String[] shutSpeedSet) {
@@ -173,10 +178,10 @@ public class ShootingIntentService extends IntentService {
     }
 
     private int calculateDelay(String shutSpeedValue) {
-        return 5000 + (shutSpeedValue.contains("\"") ? (1000 * Integer.valueOf(shutSpeedValue.trim().replace("\"", ""))) : 100);
+        return 4500 + (shutSpeedValue.contains("\"") ? (1000 * Integer.valueOf(shutSpeedValue.trim().replace("\"", ""))) : 100);
     }
 
-    private void shoot(final long currentFrame, final long frameCount, final long msInterval) {
+    private void shoot(final long currentFrame, final long frameCount, final long msInterval, final long totalityTime) {
         session.getCameraApi().executeShutter(ShutterMode.FST_SND_PUSH,
                 new Callback<String>() {
                     @Override
@@ -190,12 +195,12 @@ public class ShootingIntentService extends IntentService {
                                         Intent localIntent = new Intent(FRAME_TAKEN_ACTION).putExtra(EXTENDED_DATA_STATUS, String.valueOf(currentFrame));
                                         LocalBroadcastManager.getInstance(ShootingIntentService.this).sendBroadcast(localIntent);
 
-                                        if (currentFrame < frameCount) {
+                                        if (currentFrame < frameCount && beforeTotality(totalityTime)) {
                                             final Handler handler = new Handler();
                                             handler.postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    shoot(currentFrame + 1, frameCount, msInterval);
+                                                    shoot(currentFrame + 1, frameCount, msInterval, totalityTime);
                                                 }
                                             }, msInterval);
                                         } else {
@@ -211,5 +216,11 @@ public class ShootingIntentService extends IntentService {
                                 new DefaultFailureCallback(ShootingIntentService.this));
                     }
                 }, new DefaultFailureCallback(ShootingIntentService.this));
+    }
+
+    private boolean beforeTotality(long totalityTime) {
+        Calendar c = Calendar.getInstance();
+        long ms = c.getTimeInMillis();
+        return ms < (totalityTime - 30000);
     }
 }

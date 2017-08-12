@@ -11,6 +11,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,10 @@ import com.fuckolympus.arc.settings.Settings;
 import com.fuckolympus.arc.util.Callback;
 import com.fuckolympus.arc.util.StubCallback;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class EclipseActivity extends SessionAwareActivity {
 
@@ -224,7 +229,8 @@ public class EclipseActivity extends SessionAwareActivity {
                                     @Override
                                     public void apply(String arg) {
                                         ShootingIntentService.startActionPartialPhase(EclipseActivity.this,
-                                                framesNumber, timeLapseIntervalInSeconds * 1000);
+                                                framesNumber, timeLapseIntervalInSeconds * 1000,
+                                                totalityTimeInMillis(settings.getByKey(R.string.totality_time)));
                                     }
                                 }, failureCallback);
                     }
@@ -232,6 +238,15 @@ public class EclipseActivity extends SessionAwareActivity {
                 .build();
 
         commandChain.run(this);
+    }
+
+    private long totalityTimeInMillis(String totalityTime) {
+        String[] totalityTimeArr = StringUtils.split(totalityTime, ':');
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+                Integer.valueOf(totalityTimeArr[0]), Integer.valueOf(totalityTimeArr[1]), Integer.valueOf(totalityTimeArr[2]));
+        Date totalityDate = calendar.getTime();
+        return totalityDate.getTime();
     }
 
     private class ShootingStateReceiver extends BroadcastReceiver {
@@ -252,8 +267,17 @@ public class EclipseActivity extends SessionAwareActivity {
                 currentFrameNumberText.setTextColor(Color.parseColor(getString(R.color.colorAccent)));
 
                 Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                final Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
                 r.play();
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (r.isPlaying()) {
+                            r.stop();
+                        }
+                    }
+                }, 10000);
             }
         }
     }

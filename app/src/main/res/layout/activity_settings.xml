@@ -131,6 +131,11 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/totalityFocalValueSpinner" android:layout_weight="1"/>
             </LinearLayout>
+            <Button
+                    android:text="@string/reset_settings_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp" android:id="@+id/setDefaultBtn"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

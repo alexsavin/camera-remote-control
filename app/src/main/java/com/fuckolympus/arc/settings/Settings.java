@@ -60,4 +60,14 @@ public class Settings {
         editor.putString(context.getString(preferencesKey), value);
         editor.apply();
     }
+
+    public void reset() {
+        updateByKey(R.string.totality_time, DEF_TOTALITY_TIME);
+        updateByKey(R.string.totality_duration, DEF_TOTALITY_DURATION);
+        updateByKey(R.string.partial_phase_shut_speed, DEF_SHUT_SPEED_VALUE);
+        updateByKey(R.string.partial_phase_focal_value, DEF_TOTALITY_FOCAL_VALUE);
+        updateByKey(R.string.time_lapse_interval, DEF_TIME_LAPSE_INTERVAL);
+        updateByKey(R.string.totality_shut_speed_set, DEF_SHUT_SPEED_SET);
+        updateByKey(R.string.totality_focal_value, DEF_TOTALITY_FOCAL_VALUE);
+    }
 }

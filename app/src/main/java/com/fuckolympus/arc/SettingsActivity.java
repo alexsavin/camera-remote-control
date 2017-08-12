@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import com.fuckolympus.arc.camera.api.CameraState;
@@ -65,6 +66,16 @@ public class SettingsActivity extends SessionAwareActivity {
             @Override
             public void onClick(View v) {
                 showMultiSelectDialog();
+            }
+        });
+
+        final Button setDefaultBtn = (Button) findViewById(R.id.setDefaultBtn);
+        setDefaultBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Settings settings = session.getSettings();
+                settings.reset();
+                updateUI(settings);
             }
         });
     }

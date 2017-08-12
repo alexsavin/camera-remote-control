@@ -59,4 +59,5 @@
     <string name="totality_shut_speed_set">totality.phase.shut.speed.set</string>
 
     <string name="totality_flag">totality.flag</string>
+    <string name="reset_settings_btn">Set to default</string>
 </resources>

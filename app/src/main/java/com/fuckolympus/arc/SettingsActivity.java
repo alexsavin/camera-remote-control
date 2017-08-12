@@ -69,6 +69,8 @@ public class SettingsActivity extends SessionAwareActivity {
             }
         });
 
+        configureSpinner(R.id.totalityIntervalSpinner, Settings.INTERVALS, R.string.totality_interval);
+
         final Button setDefaultBtn = (Button) findViewById(R.id.setDefaultBtn);
         setDefaultBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,6 +171,8 @@ public class SettingsActivity extends SessionAwareActivity {
 
         TextView totalityShutSpeedText = (TextView) findViewById(R.id.totalityShutSpeedText);
         totalityShutSpeedText.setText(settings.getByKey(R.string.totality_shut_speed_set));
+
+        setSpinnerSelection(R.id.totalityIntervalSpinner, settings.getByKey(R.string.totality_interval));
     }
 
     private void setSpinnerSelection(int spinnerId, String selectedValue) {

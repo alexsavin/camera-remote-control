@@ -75,10 +75,11 @@ public class ShootingIntentService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startActionTotalityPhase(Context context, String[] shutSpeedSet) {
+    public static void startActionTotalityPhase(Context context, String[] shutSpeedSet, long msInterval) {
         Intent intent = new Intent(context, ShootingIntentService.class);
         intent.setAction(ACTION_TOTALITY_PHASE);
         intent.putExtra(SHUT_SPEED_SET, shutSpeedSet);
+        intent.putExtra(MS_INTERVAL, msInterval);
         context.startService(intent);
     }
 
@@ -102,7 +103,8 @@ public class ShootingIntentService extends IntentService {
                 handleActionPartialPhase(framesCount, msInterval, totalityTime);
             } else if (ACTION_TOTALITY_PHASE.equals(action)) {
                 final String[] shutSpeedSet = intent.getStringArrayExtra(SHUT_SPEED_SET);
-                handleActionTotalityPhase(shutSpeedSet);
+                final long msInterval = intent.getLongExtra(MS_INTERVAL, 5000L);
+                handleActionTotalityPhase(shutSpeedSet, msInterval);
             }
         }
     }
@@ -112,7 +114,7 @@ public class ShootingIntentService extends IntentService {
         shoot(1L, framesCount, msInterval, totalityTime);
     }
 
-    private void handleActionTotalityPhase(final String[] shutSpeedSet) {
+    private void handleActionTotalityPhase(final String[] shutSpeedSet, final long msInterval) {
         Log.w(this.getClass().getName(), "start totality phase. Frames count: " + shutSpeedSet.length);
 
         CommandChain.CommandChainBuilder builder = new CommandChain.CommandChainBuilder();
@@ -166,7 +168,7 @@ public class ShootingIntentService extends IntentService {
                                                 wakeLock.release();
                                             }
                                         }
-                                    }, calculateDelay(shutSpeedValue));
+                                    }, calculateDelay(shutSpeedValue, msInterval));
                                 }
                             }, failureCallback);
                 }
@@ -177,8 +179,8 @@ public class ShootingIntentService extends IntentService {
         chain.run(this);
     }
 
-    private int calculateDelay(String shutSpeedValue) {
-        return 4500 + (shutSpeedValue.contains("\"") ? (1000 * Integer.valueOf(shutSpeedValue.trim().replace("\"", ""))) : 100);
+    private long calculateDelay(String shutSpeedValue, long msInterval) {
+        return msInterval + (shutSpeedValue.contains("\"") ? (1000 * Integer.valueOf(shutSpeedValue.trim().replace("\"", ""))) : 100);
     }
 
     private void shoot(final long currentFrame, final long frameCount, final long msInterval, final long totalityTime) {

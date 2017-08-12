@@ -57,7 +57,9 @@
     <string name="time_lapse_interval">time.lapse.interval</string>
     <string name="totality_focal_value">totality.phase.focal.value</string>
     <string name="totality_shut_speed_set">totality.phase.shut.speed.set</string>
+    <string name="totality_interval">totality.interval</string>
 
     <string name="totality_flag">totality.flag</string>
     <string name="reset_settings_btn">Set to default</string>
+    <string name="totality_interval_label">Interval</string>
 </resources>

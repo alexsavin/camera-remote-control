@@ -20,6 +20,8 @@ public class Settings {
     public static final String DEF_SHUT_SPEED_SET = "4\", 1\", 2, 4, 8, 15, 30, 60, 125, 250, 500, 1000, 2000";
     public static final String DEF_TOTALITY_FOCAL_VALUE = "11";
     public static final String DEF_SHUT_SPEED_VALUE = "500";
+    public static final String[] INTERVALS = new String[] {"2500", "3000", "3500", "4000", "4500", "5000"};
+    public static final String DEF_INTERVAL = "5000";
 
     private Context context;
 
@@ -43,6 +45,7 @@ public class Settings {
                 sharedPreferences.getString(context.getString(R.string.totality_shut_speed_set), DEF_SHUT_SPEED_SET));
         settingsMap.put(R.string.totality_focal_value,
                 sharedPreferences.getString(context.getString(R.string.totality_focal_value), DEF_TOTALITY_FOCAL_VALUE));
+        settingsMap.put(R.string.totality_interval, sharedPreferences.getString(context.getString(R.string.totality_interval), DEF_INTERVAL));
     }
 
     public void updateByKey(int preferenceKey, String value) {
@@ -69,5 +72,6 @@ public class Settings {
         updateByKey(R.string.time_lapse_interval, DEF_TIME_LAPSE_INTERVAL);
         updateByKey(R.string.totality_shut_speed_set, DEF_SHUT_SPEED_SET);
         updateByKey(R.string.totality_focal_value, DEF_TOTALITY_FOCAL_VALUE);
+        updateByKey(R.string.totality_interval, DEF_INTERVAL);
     }
 }

@@ -25,6 +25,7 @@ import com.fuckolympus.arc.settings.Settings;
 import com.fuckolympus.arc.util.Callback;
 import com.fuckolympus.arc.util.StubCallback;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -110,7 +111,9 @@ public class EclipseActivity extends SessionAwareActivity {
 
         commandChain.run(this);
 
-        ShootingIntentService.startActionTotalityPhase(EclipseActivity.this, selectedShutSpeeds);
+        long msInterval = NumberUtils.toLong(session.getSettings().getByKey(R.string.totality_interval), 5000);
+
+        ShootingIntentService.startActionTotalityPhase(EclipseActivity.this, selectedShutSpeeds, msInterval);
     }
 
     @Override
